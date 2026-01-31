@@ -1,0 +1,770 @@
+\documentclass[12pt]{article}
+
+% ========== PACKAGES ========== 
+% Math and equations
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% Graphics and images
+\usepackage{graphicx}
+\usepackage{float}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+
+% Layout and formatting
+\usepackage{geometry}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\usepackage{pdflscape}  % For landscape orientation
+\usepackage{xcolor}     % For colors
+\usepackage{colortbl}   % For colored table rows
+
+% Other utilities
+\usepackage{hyperref}
+
+% ========== DOCUMENT SETUP ========== 
+% Margins (1 inch on all sides)
+\geometry{margin=1in}
+
+% Single spacing
+\singlespacing
+
+% Header and footer
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\thepage}
+
+% ========== COVER PAGE ========== 
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+    {\LARGE\bfseries Advanced Thermodynamics Homework\\[1.5cm]}
+    {\large Assignment: \underline{\hspace{6cm}} \\[1cm]}
+    {\large Name: \underline{\hspace{7cm}} \\[1cm]}
+    {\large Date: \underline{\hspace{7cm}} \\[2cm]}
+\end{titlepage}
+
+% Table of contents
+\tableofcontents
+
+
+
+
+
+
+
+% ========== PROBLEM-BY-PROBLEM HOMEWORK TEMPLATE ========== 
+
+% Instructions: For each homework problem, copy the block below and increment the problem number.
+% Each problem will start on a new page.
+\newpage
+\addcontentsline{toc}{section}{General Theory}
+\vspace{0.5cm}
+% Write your solution to Problem 1 here.
+\subsection*{1.}
+
+\section*{2.}
+\section*{3.}
+\section*{4.}
+\section*{5.}
+
+\newpage
+
+\section*{6.}
+\addcontentsline{toc}{section}{First Law}
+\vspace{0.5cm}
+
+A pumped hydro storage system is drained to extract stored energy on-demand. Water is drained toward a lower lake and a volumetric flow rate of $Q = 500\ \mathrm{m}^3/\mathrm{s}$ with an $\Delta z = 85\ \mathrm{m}$ drop in elevation.
+
+\begin{enumerate}
+    \item[(a)] \textbf{Maximum possible power with upper reservoir as a lake ($V_1 = 0$):}
+    \begin{itemize}
+        \item \textbf{Apply the Energy Equation:}
+        \begin{align*}
+            \frac{V_1^2}{2} + gz_1 &= \frac{V_2^2}{2} + gz_2 + w_{\text{turbine}} \\
+            \text{where:} \\
+            V_1 &= \text{velocity at upper reservoir (lake)} = 0 \\
+            V_2 &= \text{velocity at lower lake (assume 0)} \\
+            z_1 &= \text{elevation of upper reservoir} \\
+            z_2 &= \text{elevation of lower lake} \\
+            g &= 9.81\ \mathrm{m/s^2}
+        \end{align*}
+        \item \textbf{Solve for work per unit mass:}
+        \begin{align*}
+            w_{\text{turbine}} &= g(z_1 - z_2)
+        \end{align*}
+        \item \textbf{Calculate total power:}
+        \begin{align*}
+            \dot{W}_{\text{turbine}} &= \dot{m} \cdot w_{\text{turbine}} \\
+            \dot{m} &= \rho Q = 1000\ \mathrm{kg/m^3} \times 500\ \mathrm{m^3/s} = 500{,}000\ \mathrm{kg/s} \\
+            w_{\text{turbine}} &= 9.81\ \mathrm{m/s^2} \times 85\ \mathrm{m} = 833.85\ \mathrm{J/kg} \\
+            \dot{W}_{\text{turbine}} &= 500{,}000\ \mathrm{kg/s} \times 833.85\ \mathrm{J/kg} = 416,925,000\ \mathrm{W} = 416.9\ \mathrm{MW}
+        \end{align*}
+    \end{itemize}
+
+    \item[(b)] \textbf{Maximum possible power with upper reservoir as a river ($V_1 = 3.75\ \mathrm{m/s}$):}
+    \begin{itemize}
+        \item \textbf{Include kinetic energy at inlet:}
+        \begin{align*}
+            w_{\text{turbine}} &= \frac{V_1^2}{2} + g(z_1 - z_2) \\
+            &= \frac{(3.75\ \mathrm{m/s})^2}{2} + 9.81\ \mathrm{m/s^2} \times 85\ \mathrm{m} \\
+            &= 7.03\ \mathrm{J/kg} + 833.85\ \mathrm{J/kg} = 840.88\ \mathrm{J/kg} \\
+            \dot{W}_{\text{turbine}} &= 500{,}000\ \mathrm{kg/s} \times 840.88\ \mathrm{J/kg} = 420,440,000\ \mathrm{W} = 420.4\ \mathrm{MW}
+        \end{align*}
+        \item \textbf{Percent increase in power:}
+        \begin{align*}
+            \%\ \text{increase} &= \frac{420.4 - 416.9}{416.9} \times 100\% = 0.84\% 
+        \end{align*}
+        \item \textbf{Physical explanation:}\\
+        The increase in possible power output is due to the additional kinetic energy of the water entering the turbine when the upper reservoir is a river (nonzero velocity). This kinetic energy is converted to useful work by the turbine, resulting in a slightly higher power output compared to the case where the upper reservoir is a still lake.
+    \end{itemize}
+\end{enumerate}
+
+
+
+\section*{7.}
+\addcontentsline{toc}{section}{Piston-Cylinder Energy Balance}
+\vspace{0.5cm}
+
+A piston-cylinder system is filled with $3.8\ \mathrm{kg}$ of H$_2$ gas ($R = 4.124\ \mathrm{kJ/kg\cdot K}$) and is initially at $250\ \mathrm{kPa}$ and $900\ \mathrm{K}$. Heat is removed from the system until it reaches $400\ \mathrm{K}$. $C_v(T)$ and $C_p(T)$ are plotted as functions of temperature for this gas.
+
+\textbf{Part A: Find the change in volume ($\mathrm{m}^3$) of the system.}
+
+\begin{itemize}
+    \item Use the ideal gas law to find the initial volume:
+    \begin{align*}
+        PV &= mRT \\
+        V_1 &= \frac{mRT_1}{P} \\
+        &= \frac{(3.8\ \mathrm{kg})(4.124\ \mathrm{kJ/kg\cdot K})(900\ \mathrm{K})}{250\ \mathrm{kPa}} \\
+        &= 56.416\ \mathrm{m}^3
+    \end{align*}
+    \item For a constant pressure process, $\frac{T_1}{V_1} = \frac{T_2}{V_2}$:
+    \begin{align*}
+        \frac{900}{56.416} &= \frac{400}{V_2} \\
+        V_2 &= \frac{400 \times 56.416}{900} = 25.073\ \mathrm{m}^3
+    \end{align*}
+    \item Change in volume:
+    \begin{align*}
+        \Delta V &= V_2 - V_1 = 25.073 - 56.416 = -31.343\ \mathrm{m}^3
+    \end{align*}
+    The negative sign indicates the volume decreased as the gas cooled.
+\end{itemize}
+
+\textbf{Part B: Find the magnitude (kJ) and direction (in or out of system) of the boundary work during this process. Defend why your answer makes sense.}
+
+\begin{itemize}
+    \item For a constant pressure process, boundary work is:
+    \begin{align*}
+        W &= P\Delta V = P(V_2 - V_1) \\
+        &= 250\ \mathrm{kPa} \times (25.073 - 56.416)\ \mathrm{m}^3 \\
+        &= 250\ \mathrm{kPa} \times (-31.343\ \mathrm{m}^3) \\
+        &= -7,836\ \mathrm{kJ}
+    \end{align*}
+    \item The negative sign indicates work is done \textbf{by} the system (the gas does work on the surroundings as it contracts). If you define work done \textbf{on} the system, $W = +7,836\ \mathrm{kJ}$ into the system. This makes sense because as heat is removed at constant pressure, the gas contracts and the surroundings do work on the gas.
+\end{itemize}
+
+\textbf{Part C: Calculate the change in specific enthalpy ($\mathrm{kJ/kg}$) and internal energy ($\mathrm{kJ/kg}$) of the gas during this process using the given property tables.}
+
+\begin{itemize}
+    \item \textbf{Change in specific enthalpy ($\Delta h$):}
+    \begin{align*}
+        \Delta h &= \int_{T_1}^{T_2} C_p(T)\,dT \\
+        &\approx \bar{C_p} \times (T_2 - T_1)
+    \end{align*}
+    Where $\bar{C_p}$ is the average of $C_p$ at 900 K and 400 K (read from the graph):
+    \begin{align*}
+        \bar{C_p} &\approx \frac{14.35 + 14.93}{2} = 14.64\ \mathrm{kJ/kg\cdot K} \\
+        \Delta h &= 14.64\ \mathrm{kJ/kg\cdot K} \times (400 - 900)\ \mathrm{K} \\
+        &= 14.64 \times (-500) = -7,320\ \mathrm{kJ/kg}
+    \end{align*}
+    \item \textbf{Change in specific internal energy ($\Delta u$):}
+    \begin{align*}
+        \Delta u &= \int_{T_1}^{T_2} C_v(T)\,dT \\
+        &\approx \bar{C_v} \times (T_2 - T_1)
+    \end{align*}
+    Where $\bar{C_v}$ is the average of $C_v$ at 900 K and 400 K (read from the graph, e.g. $10.2$ and $10.9$):
+    \begin{align*}
+        \bar{C_v} &\approx \frac{10.2 + 10.9}{2} = 10.55\ \mathrm{kJ/kg\cdot K} \\
+        \Delta u &= 10.55\ \mathrm{kJ/kg\cdot K} \times (400 - 900)\ \mathrm{K} \\
+        &= 10.55 \times (-500) = -5,275\ \mathrm{kJ/kg}
+    \end{align*}
+    \item Both $\Delta h$ and $\Delta u$ are negative, indicating the gas lost enthalpy and internal energy as it cooled from 900 K to 400 K.
+\end{itemize}
+\newpage
+
+\section*{8.}
+\addcontentsline{toc}{section}{Centrifugal Pump Energy Balance}
+\vspace{0.5cm}
+
+A centrifugal pump is operated steadily and consumes $10\ \mathrm{kW}$ of shaft work to move water ($1000\ \mathrm{kg/m^3}$, $C = 4.2\ \mathrm{kJ/kg\cdot K}$) at a mass flow rate of $0.05\ \mathrm{kg/s}$. The pump is not very well insulated. Temperature is measured at the inlet ($20\ ^\circ\mathrm{C}$) and the outlet ($45\ ^\circ\mathrm{C}$) of the pump. The cross sectional area at the inlet and the outlet of the pump is the same ($A_2 = A_3$).
+
+\textbf{Part A: Prove that the change in kinetic energy is negligible}
+
+\begin{itemize}
+    \item \textbf{Given:}
+    \begin{align*}
+        \dot{m} &= 0.05\ \mathrm{kg/s} \\
+        A_2 &= A_3 \\
+        \rho &= 1000\ \mathrm{kg/m^3}
+    \end{align*}
+    \item \textbf{Conservation of mass for steady flow:}
+    \begin{align*}
+        \dot{m} &= \rho A_2 v_2 = \rho A_3 v_3 \\
+        \Rightarrow v_2 = v_3
+    \end{align*}
+    \item \textbf{Change in kinetic energy:}
+    \begin{align*}
+        \Delta KE &= \frac{1}{2} m (v_3^2 - v_2^2) = 0
+    \end{align*}
+    \item \textbf{Conclusion:} The change in kinetic energy is negligible (zero) for the water in this pump.
+\end{itemize}
+
+\textbf{Part B: Estimate the heat loss (kW) from the pump}
+
+\begin{itemize}
+    \item \textbf{Given:}
+    \begin{align*}
+        \dot{W}_s &= 10\ \mathrm{kW} \\
+        C &= 4.2\ \mathrm{kJ/kg\cdot K} \\
+        \dot{m} &= 0.05\ \mathrm{kg/s} \\
+        T_1 &= 20\ ^\circ\mathrm{C} \\
+        T_2 &= 45\ ^\circ\mathrm{C}
+    \end{align*}
+    \item \textbf{Steady-flow energy equation (SFEE):}
+    \begin{align*}
+        \dot{Q}_{\text{loss}} - \dot{W}_s &= \dot{m}\left[\Delta h + \Delta KE + \Delta PE\right]
+    \end{align*}
+    \item \textbf{Assumptions:}
+    \begin{itemize}
+        \item $\Delta KE = 0$ (from Part A)
+        \item $\Delta PE \approx 0$ (not significant)
+        \item For incompressible liquid: $\Delta h = C \Delta T$
+    \end{itemize}
+    \item \textbf{Energy balance:}
+    \begin{align*}
+        \dot{Q}_{\text{loss}} - \dot{W}_s &= \dot{m} \cdot C \cdot (T_2 - T_1) \\
+        \dot{m} \cdot C \cdot \Delta T &= 0.05 \times 4.2 \times (45 - 20) \\
+        &= 0.05 \times 4.2 \times 25 \\
+        &= 5.25\ \mathrm{kW}
+    \end{align*}
+    \item \textbf{Solve for heat loss:}
+    \begin{align*}
+        \dot{Q}_{\text{loss}} &= \dot{W}_s - \dot{m} \cdot C \cdot \Delta T \\
+        &= 10 - 5.25 = 4.75\ \mathrm{kW}
+    \end{align*}
+    \item \textbf{Answer:} The heat loss from the pump is approximately $4.75\ \mathrm{kW}$ (rounded: $4.8\ \mathrm{kW}$).
+\end{itemize}
+
+\newpage
+
+\section*{9.}
+\addcontentsline{toc}{section}{Isentropic Steam Turbine}
+\vspace{0.5cm}
+
+A well-insulated steam turbine is operating reversibly with $3\ \mathrm{kg/s}$ of steam at a pressure of $3\ \mathrm{MPa}$. The majority of the steam is exhausted at $50\ \mathrm{kPa}$ and $100^\circ\mathrm{C}$. However, $12\%$ of this flow is diverted within the steam turbine to provide preheating for other cycle components once the inlet stream was expanded to $500\ \mathrm{kPa}$. Determine the power produced by this turbine, in kW.
+
+\textbf{Problem Setup}
+
+\begin{itemize}
+    \item \textbf{Given:}
+    \begin{align*}
+        \dot{m}_1 &= 3\ \mathrm{kg/s} \\
+        P_1 &= 3\ \mathrm{MPa} \\
+        P_2 &= 500\ \mathrm{kPa} \\
+        P_3 &= 50\ \mathrm{kPa} \\
+        T_3 &= 100^\circ\mathrm{C} \\
+        \text{Extraction flow fraction:} &\ 0.12
+    \end{align*}
+    \item \textbf{Mass Flow Rates:}
+    \begin{align*}
+        \dot{m}_2 &= 0.12 \times \dot{m}_1 = 0.36\ \mathrm{kg/s} \\
+        \dot{m}_3 &= \dot{m}_1 - \dot{m}_2 = 2.64\ \mathrm{kg/s}
+    \end{align*}
+    \item \textbf{Steady Flow Energy Equation (SFEE) for the turbine:}
+    \begin{align*}
+        \dot{W}_{\text{out}} = \dot{m}_1 h_1 - \dot{m}_2 h_2 - \dot{m}_3 h_3
+    \end{align*}
+    where:
+    \begin{itemize}
+        \item $h_1$ = specific enthalpy at inlet (3 MPa, isentropic assumption from inlet state)
+        \item $h_2$ = specific enthalpy at extraction point (500 kPa)
+        \item $h_3$ = specific enthalpy at exhaust (50 kPa, 100$^\circ$C)
+    \end{itemize}
+    \item \textbf{Values to Look Up from Steam Tables:}
+    \begin{itemize}
+        \item State 1 (Inlet): $P_1 = 3$ MPa. Need to determine if saturated or superheated. Assuming isentropic process: $s_1 = s_2 = s_3$ (for reversible operation). Look up: $h_1$, $s_1$.
+        \item State 3 (Exhaust): $P_3 = 50$ kPa, $T_3 = 100^\circ$C. Look up: $h_3$, $s_3$.
+        \item State 2 (Extraction): $P_2 = 500$ kPa, $s_2 = s_1$ (isentropic). Look up: $h_2$ at 500 kPa with entropy $s_2$.
+    \end{itemize}
+    \item \textbf{Power Calculation Setup:}
+    \begin{align*}
+        \dot{W}_{\text{out}} &= (3\ \mathrm{kg/s}) h_1 - (0.36\ \mathrm{kg/s}) h_2 - (2.64\ \mathrm{kg/s}) h_3 \\
+        &= 3h_1 - 0.36h_2 - 2.64h_3 \quad [\mathrm{kW}]
+    \end{align*}
+    \item \textbf{Note:} Use steam tables to look up $h_1$, $h_2$, and $h_3$ as needed. If isentropic, use $s_1 = s_2 = s_3$ to find the correct enthalpy values at each state.
+\end{itemize}
+
+
+
+\newpage
+
+\section*{10.}
+\addcontentsline{toc}{section}{Real Devices and Entropy Balances}
+\vspace{0.5cm}
+
+A steam turbine is operating steadily and expands a $2.5\ \mathrm{kg/s}$ stream of steam/water from $3\ \mathrm{MPa}$ and $400\ ^\circ\mathrm{C}$ to $100\ \mathrm{kPa}$. Assume the turbine is well-insulated. The manufacturer performance curves indicate that under these conditions, the turbine would operate with an isentropic efficiency of $0.85$.
+
+\textbf{Given:}
+\begin{itemize}
+    \item $\dot{m} = 2.5\ \mathrm{kg/s}$
+    \item $P_1 = 3\ \mathrm{MPa}$, $T_1 = 400\ ^\circ\mathrm{C}$
+    \item $P_2 = 100\ \mathrm{kPa}$
+    \item $\eta_s = 0.85$
+    \item Steady flow, well-insulated ($\dot{Q} = 0$), negligible $\Delta KE$ and $\Delta PE$
+\end{itemize}
+
+\textbf{PART A: Isentropic Operation}
+
+\begin{itemize}
+    \item \textbf{Goal:} Find $T_{2s}$, $h_{2s}$, $x_{2s}$ (quality), $s_{2s}$
+    \item \textbf{Process:}
+    \begin{enumerate}
+        \item Look up inlet state properties (superheated steam at $P_1 = 3$ MPa, $T_1 = 400^\circ$C): $h_1$, $s_1$ (from steam tables)
+        \item Apply isentropic condition: $s_{2s} = s_1$
+        \item At $P_2 = 100$ kPa, $s_{2s} = s_1$: compare $s_{2s}$ with $s_f$ and $s_g$ at 100 kPa
+        \item If $s_f < s_{2s} < s_g$, two-phase mixture: $x_{2s} = (s_{2s} - s_f)/s_{fg}$
+        \item Find enthalpy: $h_{2s} = h_f + x_{2s} h_{fg}$
+        \item Temperature: $T_{2s} = T_{sat}$ at 100 kPa
+    \end{enumerate}
+    \item \textbf{Summary for Part A:}
+    \begin{itemize}
+        \item $T_{2s} = \_$ K
+        \item $h_{2s} = \_$ kJ/kg
+        \item $x_{2s} = \_$
+        \item $s_{2s} = \_$ kJ/kg-K
+    \end{itemize}
+\end{itemize}
+
+\textbf{PART B: Real Operation}
+
+\begin{itemize}
+    \item \textbf{Goal:} Find $T_2$, $h_2$, $x_2$, $s_2$ (actual outlet conditions)
+    \item \textbf{Process:}
+    \begin{enumerate}
+        \item Use isentropic efficiency: $\eta_s = (h_1 - h_2)/(h_1 - h_{2s}) = 0.85$
+        \item Solve for $h_2$: $h_2 = h_1 - \eta_s (h_1 - h_{2s})$
+        \item At $P_2 = 100$ kPa, $h_2$ known: compare $h_2$ with $h_f$ and $h_g$ at 100 kPa
+        \item If $h_f < h_2 < h_g$, two-phase mixture: $x_2 = (h_2 - h_f)/h_{fg}$
+        \item Find entropy: $s_2 = s_f + x_2 s_{fg}$
+        \item Temperature: $T_2 = T_{sat}$ at 100 kPa
+    \end{enumerate}
+    \item \textbf{Summary for Part B:}
+    \begin{itemize}
+        \item $T_2 = \_$ K
+        \item $h_2 = \_$ kJ/kg
+        \item $x_2 = \_$
+        \item $s_2 = \_$ kJ/kg-K
+    \end{itemize}
+\end{itemize}
+
+\textbf{PART C: Work Comparison}
+
+\begin{itemize}
+    \item \textbf{Goal:} Calculate and compare turbine work output
+    \item \textbf{Process:}
+    \begin{enumerate}
+        \item Isentropic work: $w_s = h_1 - h_{2s}$
+        \item Actual work: $w_{actual} = h_1 - h_2$
+        \item Power output: $\dot{W}_s = \dot{m} w_s$, $\dot{W}_{actual} = \dot{m} w_{actual}$
+        \item Compare difference: $\Delta \dot{W} = \dot{W}_s - \dot{W}_{actual}$
+        \item Explanation: Real turbine produces less work due to irreversibilities (friction, turbulence, heat transfer within fluid). Energy lost to entropy generation. Verify: $w_{actual} = \eta_s \times w_s$
+    \end{enumerate}
+\end{itemize}
+
+\textbf{PART D: Entropy Generation Rate}
+
+\begin{itemize}
+    \item \textbf{Goal:} Calculate $\dot{S}_{gen}$ using entropy balance
+    \item \textbf{Given entropy balance:}
+    \begin{align*}
+        \sum \frac{\dot{Q}}{T_{boundary}} + \sum \dot{m} s_{in} - \sum \dot{m} s_{out} + \dot{S}_{gen} = \frac{dS_{sys}}{dt}
+    \end{align*}
+    \item \textbf{For steady flow, well-insulated turbine:}
+    \begin{itemize}
+        \item $\frac{dS_{sys}}{dt} = 0$ (steady state)
+        \item $\sum \frac{\dot{Q}}{T_{boundary}} = 0$ (adiabatic)
+        \item Single inlet and outlet stream
+    \end{itemize}
+    \item \textbf{Simplified:}
+    \begin{align*}
+        0 + \dot{m} s_1 - \dot{m} s_2 + \dot{S}_{gen} = 0 \\
+        \Rightarrow \dot{S}_{gen} = \dot{m}(s_2 - s_1)
+    \end{align*}
+    \item \textbf{Check:} $\dot{S}_{gen} > 0$ for real process (confirms 2nd law)
+\end{itemize}
+
+\textbf{PART E: Comparison and Benefit}
+
+\begin{itemize}
+    \item \textbf{Goal:} Compare A vs B properties and identify benefit of non-ideal turbine
+    \item \textbf{Process:}
+    \begin{enumerate}
+        \item Create comparison table:
+        \begin{center}
+        \begin{tabular}{l|c|c|c}
+        Property & Isentropic (A) & Real (B) & Difference \\
+        \hline
+        $h_2$ (kJ/kg) & $\_$ & $\_$ & $\_$ \\
+        $s_2$ (kJ/kg-K) & $\_$ & $\_$ & $\_$ \\
+        $x_2$ (quality) & $\_$ & $\_$ & $\_$ \\
+        $T_2$ (K) & $\_$ & $\_$ & $\_$ \\
+        \end{tabular}
+        \end{center}
+        \item Key observation: Real turbine has higher quality ($x_2 > x_{2s}$), higher entropy ($s_2 > s_1$), higher enthalpy at exit ($h_2 > h_{2s}$)
+        \item Benefit: Less liquid content in exhaust (higher quality = more vapor), reduces water droplet erosion on turbine blades. Non-ideal operation trades work output for blade longevity; small sacrifice in efficiency protects equipment.
+    \end{enumerate}
+\end{itemize}
+
+\textbf{Solution Steps Summary}
+\begin{enumerate}
+    \item Look up inlet properties from steam tables ($P_1$, $T_1$)
+    \item Part A: Use $s_{2s} = s_1$, find two-phase properties at $P_2$
+    \item Part B: Apply $\eta_s$ to find $h_2$, then find two-phase properties
+    \item Part C: Calculate work from enthalpy drops, compare
+    \item Part D: Apply entropy balance with given equation
+    \item Part E: Compare moisture content (quality), explain blade erosion benefit
+\end{enumerate}
+
+
+\newpage
+\section*{11.}
+\addcontentsline{toc}{section}{Entropy Change of a Pure Substance}
+\vspace{0.5cm}
+
+A free piston-cylinder device is filled with $3\ \mathrm{kg}$ of a saturated liquid-vapor mixture of water/steam at $200\ \mathrm{kPa}$. The exterior of the tank may be assumed to be well-insulated. \textbf{Initially, 40\% of the mass is in the liquid phase} (so $x_1 = 0.60$). Heat is supplied via an electric resistance heater until all the liquid in the tank is evaporated. \textbf{Determine the specific entropy change ($\Delta s$, kJ/kg-K) of the steam inside the tank during this process.}
+
+\textbf{Given Information}
+\begin{itemize}
+    \item Mass: $m = 3$ kg
+    \item Pressure: $P = 200$ kPa (constant)
+    \item Initial quality: $x_1 = 0.60$ (40\% liquid $\rightarrow$ 60\% vapor)
+    \item Final quality: $x_2 = 1.0$ (all liquid evaporated $\rightarrow$ saturated vapor)
+\end{itemize}
+
+\textbf{Relevant Equations}
+\begin{itemize}
+    \item For specific entropy in a two-phase mixture:
+    \begin{align*}
+        s &= s_f + x \cdot s_{fg}
+    \end{align*}
+    \item Specific entropy change:
+    \begin{align*}
+        \Delta s &= s_2 - s_1
+    \end{align*}
+\end{itemize}
+
+\textbf{Setup with Numbers}
+\begin{itemize}
+    \item State 1 (initial):
+    \begin{align*}
+        s_1 &= s_f + x_1 \cdot s_{fg} \\
+        &= s_f + (0.60) \cdot s_{fg}
+    \end{align*}
+    \item State 2 (final):
+    \begin{align*}
+        s_2 &= s_g \quad \text{(or equivalently: $s_2 = s_f + (1.0) \cdot s_{fg}$)}
+    \end{align*}
+    \item Change in specific entropy:
+    \begin{align*}
+        \Delta s &= s_2 - s_1 \\
+        &= s_g - [s_f + (0.60) \cdot s_{fg}]
+    \end{align*}
+\end{itemize}
+
+\textbf{Process Steps}
+\begin{enumerate}
+    \item Look up steam table properties at $P = 200$ kPa (saturated pressure table): $s_f$, $s_{fg}$, $s_g$
+    \item Calculate initial specific entropy ($s_1$): $s_1 = s_f + (0.60) \cdot s_{fg}$
+    \item Identify final specific entropy ($s_2$): $s_2 = s_g$
+    \item Calculate the change: $\Delta s = s_2 - s_1$
+    \item Check your answer (units should be kJ/kg$\cdot$K)
+\end{enumerate}
+
+
+\section*{12.}
+\addcontentsline{toc}{section}{Total Entropy Change in a Piston-Cylinder}
+\vspace{0.5cm}
+
+A piston–cylinder device is well insulated and contains $4.8$ L of saturated liquid ($x = 0$) water at $150$ kPa. The piston moves freely within the cylinder. An electric resistance heater inside the cylinder is suddenly turned on, and $1700$ kJ of energy is delivered to the steam. \textbf{Determine the total entropy change ($\Delta S$, kJ/kg) of the steam in the device during this process.}
+
+\textbf{Given Information}
+\begin{itemize}
+    \item Initial volume: $V_1 = 4.8$ L $= 0.0048$ m$^3$
+    \item Initial state: Saturated liquid water, $x_1 = 0$
+    \item Initial pressure: $P_1 = 150$ kPa
+    \item Constant pressure process ($P_2 = P_1$)
+    \item Energy input: $Q_{in} = 1700$ kJ
+\end{itemize}
+
+\textbf{Assumptions}
+\begin{itemize}
+    \item Well-insulated system $\rightarrow$ no heat loss to surroundings
+    \item Piston moves freely $\rightarrow$ constant pressure process
+    \item Neglect kinetic and potential energy changes
+    \item Quasi-equilibrium process
+\end{itemize}
+
+\textbf{Relevant Equations}
+\begin{itemize}
+    \item Energy Balance (First Law):
+    \begin{align*}
+        Q_{in} - W_{out} &= \Delta U = m(u_2 - u_1)
+    \end{align*}
+    For constant pressure:
+    \begin{align*}
+        W_{out} &= P(V_2 - V_1) = mP(v_2 - v_1)
+        \\
+        Q_{in} &= m(u_2 - u_1) + mP(v_2 - v_1) = m(h_2 - h_1)
+    \end{align*}
+    \item Entropy Change:
+    \begin{align*}
+        \Delta S &= m(s_2 - s_1) \\
+        \Delta s &= s_2 - s_1
+    \end{align*}
+\end{itemize}
+
+\textbf{Solution Process}
+\begin{enumerate}
+    \item \textbf{Find initial state properties at State 1:}
+    \begin{itemize}
+        \item Look up saturated liquid properties at $P_1 = 150$ kPa:
+        \item $v_1 = v_f$ @ 150 kPa (m$^3$/kg)
+        \item $h_1 = h_f$ @ 150 kPa (kJ/kg)
+        \item $s_1 = s_f$ @ 150 kPa (kJ/kg·K)
+        \item $T_{sat}$ @ 150 kPa (°C)
+    \end{itemize}
+    \item \textbf{Calculate mass of water:}
+    \begin{align*}
+        m = \frac{V_1}{v_1} = \frac{0.0048\ \text{m}^3}{v_f @ 150\ \text{kPa}}
+    \end{align*}
+    \item \textbf{Apply energy balance to find State 2 enthalpy:}
+    \begin{align*}
+        h_2 = h_1 + \frac{Q_{in}}{m} = h_f @ 150\ \text{kPa} + \frac{1700\ \text{kJ}}{m}
+    \end{align*}
+    \item \textbf{Determine State 2 condition:}
+    \begin{itemize}
+        \item Knowing $P_2 = 150$ kPa and $h_2$ from above, compare $h_2$ to $h_f$ and $h_g$ at 150 kPa:
+        \item If $h_f < h_2 < h_g$ $\rightarrow$ two-phase mixture:
+        \begin{align*}
+            x_2 = \frac{h_2 - h_f}{h_{fg}}
+        \end{align*}
+        \item Then find entropy:
+        \begin{align*}
+            s_2 = s_f + x_2 \cdot s_{fg}
+        \end{align*}
+        \item If $h_2 > h_g$ $\rightarrow$ superheated vapor:
+        \begin{itemize}
+            \item Use superheated steam tables at $P_2 = 150$ kPa to interpolate for $s_2$ at the calculated $h_2$.
+        \end{itemize}
+    \end{itemize}
+    \item \textbf{Calculate entropy change:}
+    \begin{align*}
+        \Delta s = s_2 - s_1 = s_2 - s_f @ 150\ \text{kPa}
+    \end{align*}
+    (Result in kJ/kg·K)
+\end{enumerate}
+
+
+
+
+\section*{13.}
+\addcontentsline{toc}{section}{Entropy Changes: Incompressible Substances and Ideal Gases}
+\vspace{0.5cm}
+
+Two solar receivers are proposed for storing concentrated solar energy as heat in either solid ceramic particles (CARBOBEAD CP, $\rho = 3270$ kg/m$^3$, $C \approx 1.3$ kJ/kg·K up to 1100$^\circ$C) or compressed air. Both receivers are designed to heat their respective materials from 250$^\circ$C to 1100$^\circ$C. Compressed air is introduced into the one receiver at a mass flow rate of $0.75$ kg/s, 250$^\circ$C, and 4000 kPa. The heated air in the receiver is then expanded reversibly through a well-insulated turbine to an environmental pressure of 100 kPa. Assume table A-17 is populated with a reference state of 0 K and 100 kPa and the gas constant for air is $R = 0.287$ kJ/kg·K.\par
+\textbf{Make sure you clearly label additional assumptions used to solve the problem.}
+
+\textbf{PART A: Change in specific entropy (kJ/kg·K) of the particle curtain from 1 $\rightarrow$ 2}
+
+For an incompressible substance with constant specific heat:
+\begin{align*}
+    \Delta s_{1\rightarrow2} &= C \ln\left(\frac{T_2}{T_1}\right)
+\end{align*}
+Where $C = 1.3$ kJ/kg·K, $T_1$ and $T_2$ in K.\par
+\textit{Assumption:} Initial and final temperatures of the ceramic particles must be specified or reasonably assumed.
+
+\textbf{PART B: Change in specific entropy (kJ/kg·K) of the compressed air stream from 3 $\rightarrow$ 4}
+
+For an ideal gas using Table A-17:
+\begin{align*}
+    \Delta s_{3\rightarrow4} &= s^\circ(T_4) - s^\circ(T_3) - R \ln\left(\frac{P_4}{P_3}\right)
+\end{align*}
+Where $R = 0.287$ kJ/kg·K.\par
+\textit{Assumption:} $P_4$ at the receiver outlet is likely $\approx P_3$ if pressure drop is negligible.
+
+\textbf{PART C: Specific entropy (kJ/kg·K) of the compressed air stream for state 4}
+
+\begin{align*}
+    s_4 = s^\circ(T_4) - R \ln\left(\frac{P_4}{P_0}\right)
+\end{align*}
+Where $P_0 = 100$ kPa (reference pressure).\par
+\textit{Assumption:} Use $P_4$ from Part B.
+
+\textbf{PART D: Work (kW) produced via the turbine from 4 $\rightarrow$ 5}
+
+For a reversible adiabatic turbine, using SFEE:
+\begin{align*}
+    \dot{W}_{turb} = \dot{m}(h_4 - h_5)
+\end{align*}
+Where $\dot{m} = 0.75$ kg/s.\par
+\textit{Process:}
+\begin{enumerate}
+    \item Look up $h_4$ at $T_4 = 1373$ K from Table A-17
+    \item For reversible (isentropic) expansion: $s_5 = s_4$
+    \item With $s_5 = s_4$ and $P_5 = 100$ kPa, find $T_5$ such that $s^\circ(T_5) = s_4$
+    \item Look up $h_5$ at $T_5$ from Table A-17
+    \item Calculate $h_4 - h_5$
+    \item Multiply by mass flow rate to get power in kW
+\end{enumerate}
+
+\textbf{Summary of Solution Process}
+\begin{enumerate}
+    \item Identify all state points and list known properties (T, P) for each
+    \item State assumptions clearly (e.g., $P_4 \approx P_3$, reversible processes, reference states)
+    \item Use Table A-17 for all air property lookups ($s^\circ$, $h$)
+    \item For incompressible substances: $\Delta s = C \ln(T_2/T_1)$
+    \item For ideal gases: $s = s^\circ(T) - R \ln(P/P_0)$
+    \item For turbine work: Apply SFEE with isentropic constraint ($s_5 = s_4$)
+    \item Check signs: Heating $\rightarrow$ $+\Delta s$, Cooling $\rightarrow$ $-\Delta s$; Turbine $\rightarrow$ $+W$ (work out)
+    \item Units: Keep everything in kJ, kg, K, kPa throughout
+\end{enumerate}
+
+
+
+\newpage
+
+\section*{14.}
+\addcontentsline{toc}{section}{Carnot Cycle Heat Engines}
+\vspace{0.5cm}
+
+The performance of an ideal concentrated solar power plant can be modeled as the combined efficiency of a (1) solar receiver and (2) Carnot heat engine. The solar receiver absorbs concentrated solar resources and delivers them as heat to a power cycle. The total ideal system efficiency is the product of the receiver efficiency and the heat engine efficiency in converting incident solar resources into work.
+
+\textbf{Given Information}
+\begin{itemize}
+    \item Concentration ratios ($C$): 100, 500, 1000, 2000, 3000 suns
+    \item Solar irradiance ($I$): 1000 W/m$^2$
+    \item Stefan-Boltzmann constant ($\sigma$): $5.67 \times 10^{-8}$ W/(m$^2$·K$^4$)
+    \item Cold reservoir temperature ($T_L$): Assume ambient $\approx 300$ K
+    \item Hot reservoir temperature range ($T_H$): 300 K to 2600 K
+\end{itemize}
+
+\textbf{PART A: Plot Total Efficiency}
+
+\textbf{Relevant Equations}
+\begin{itemize}
+    \item Receiver Efficiency:
+    \begin{align*}
+        \eta_{receiver} &= 1 - \frac{\sigma T_H^4}{C \cdot I}
+    \end{align*}
+    \item Carnot Heat Engine Efficiency:
+    \begin{align*}
+        \eta_{Carnot,HE} &= 1 - \frac{T_L}{T_H}
+    \end{align*}
+    \item Total System Efficiency:
+    \begin{align*}
+        \eta_{Total} &= \eta_{receiver} \cdot \eta_{Carnot,HE} \\
+        &= \left(1 - \frac{5.67 \times 10^{-8} \cdot T_H^4}{C \cdot 1000}\right) \cdot \left(1 - \frac{300}{T_H}\right)
+    \end{align*}
+\end{itemize}
+
+\textbf{Process for Part A}
+\begin{enumerate}
+    \item For each concentration ratio $C$ (100, 500, 1000, 2000, 3000):
+    \begin{itemize}
+        \item Create array of $T_H$ values from 300 K to 2600 K (increment 25--50 K)
+        \item For each $T_H$, calculate:
+        \begin{itemize}
+            \item $\eta_{receiver} = 1 - (5.67\times10^{-8} \times T_H^4) / (C \times 1000)$
+            \item $\eta_{Carnot,HE} = 1 - (300 / T_H)$
+            \item $\eta_{Total} = \eta_{receiver} \times \eta_{Carnot,HE}$
+        \end{itemize}
+    \end{itemize}
+    \item Plot $\eta_{Total}$ (y-axis) vs $T_H$ (x-axis) with 5 curves (one for each $C$ value)
+    \item Label axes, add legend showing $C$ values
+    \item Submit plot and code
+\end{enumerate}
+
+\textbf{PART B: Identify Optimal Receiver Temperature}
+
+\begin{enumerate}
+    \item From the plots in Part A, identify the $T_H$ that gives maximum $\eta_{Total}$ for each $C$ value
+    \item Comment on trends:
+    \begin{itemize}
+        \item How does optimal $T_H$ change with concentration ratio $C$?
+        \item What physical trade-offs are happening?
+            \begin{itemize}
+                \item Higher $T_H$ $\rightarrow$ Better Carnot efficiency BUT worse receiver efficiency (more radiation losses)
+                \item Higher $C$ $\rightarrow$ Can operate at higher $T_H$ before radiation losses dominate
+            \end{itemize}
+    \end{itemize}
+    \item Explain why there's an optimum (competing effects of the two efficiency terms)
+\end{enumerate}
+
+\textbf{Physical Insight}
+
+The total efficiency is a product of two competing terms:
+\begin{itemize}
+    \item Receiver efficiency decreases with $T_H$ (radiation losses scale as $T^4$)
+    \item Carnot efficiency increases with $T_H$ (better thermodynamic limit)
+\end{itemize}
+The optimum occurs where the product is maximized. Higher concentration $C$ allows higher optimal $T_H$ because concentrated sunlight offsets radiation losses.
+
+
+
+
+% ========== APPENDIX ========== 
+\appendix
+\section{Appendix}
+% Add any supplementary material, extra figures, or code listings here.
+
+% ========== IMAGE, TABLE, AND CODE EXAMPLES ========== 
+
+% Example image:
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.6\textwidth]{your-image-file}
+%     \caption{Caption for your image.}
+%     \label{fig:example}
+% \end{figure}
+
+% Example table:
+% \begin{table}[H]
+%     \centering
+%     \begin{tabularx}{0.8\textwidth}{l X}
+%         \toprule
+%         Header 1 & Header 2 \\
+%         \midrule
+%         Row 1 & Description \\
+%         Row 2 & Description \\
+%         \bottomrule
+%     \end{tabularx}
+%     \caption{Example table.}
+%     \label{tab:example}
+% \end{table}
+
+% Example code snippet:
+% \begin{verbatim}
+% % Paste your code here
+% for i = 1:10
+%     disp(i)
+% end
+% \end{verbatim}
+
+\end{document}
+
+
