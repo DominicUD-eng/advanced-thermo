@@ -67,11 +67,31 @@
 \vspace{0.5cm}
 % Write your solution to Problem 1 here.
 \subsection*{1.}
+It is assumed the system is a simple compressible system, therefore there are two degrees of freedom and the rest of the intensive properties can be calculated using an equation of state, or found in a table of common fluids.
 
 \section*{2.}
+\begin{itemize}
+    \item Closed system: (a)
+    \item Open system: (c)
+    \item Isolated system: (b)
+\end{itemize}
 \section*{3.}
+\textbf{a. Internal energy (U):} The microscopic kinetic and potential energy of the molecules within the mass.
+
+\textbf{b. Kinetic energy (KE):} Energy associated with the macroscopic velocity of the mass, given by $\frac{1}{2}mv^2$.
+
+\textbf{e. Potential energy (PE):} Energy associated with the position of the mass in a gravitational or other force field, given by $mgz$.
+
+\textbf{Notes:}
+\begin{itemize}
+    \item[f.] Electrical energy could potentially be considered if the mass crossing a system boundary is electrically charged, but it would be a rare circumstance.
+    \item[e.] Flow work is a summation of other components, not necessarily carried by the mass itself.
+    \item[c.] $E = mc^2$, so an argument could be made but it is not relevant here.
+\end{itemize}
 \section*{4.}
+\textbf{False!} Only solids resist shear stress by static deflection. Fluids continuously deform under shear stress.
 \section*{5.}
+(c), assuming $V_n$ is the velocity normal to $A_c$, then the final units are kg/s.
 
 \newpage
 
@@ -295,18 +315,39 @@ A well-insulated steam turbine is operating reversibly with $3\ \mathrm{kg/s}$ o
         \item $h_2$ = specific enthalpy at extraction point (500 kPa)
         \item $h_3$ = specific enthalpy at exhaust (50 kPa, 100$^\circ$C)
     \end{itemize}
-    \item \textbf{Values to Look Up from Steam Tables:}
+    \item \textbf{Steam Properties from CoolProp CLI:}
     \begin{itemize}
-        \item State 1 (Inlet): $P_1 = 3$ MPa. Need to determine if saturated or superheated. Assuming isentropic process: $s_1 = s_2 = s_3$ (for reversible operation). Look up: $h_1$, $s_1$.
-        \item State 3 (Exhaust): $P_3 = 50$ kPa, $T_3 = 100^\circ$C. Look up: $h_3$, $s_3$.
-        \item State 2 (Extraction): $P_2 = 500$ kPa, $s_2 = s_1$ (isentropic). Look up: $h_2$ at 500 kPa with entropy $s_2$.
+        \item \textbf{State 1 (Inlet):} $P_1 = 3$ MPa, saturated vapor
+        \begin{align*}
+            T_1 &= 507.0\ \mathrm{K} = 234^\circ\mathrm{C} \\
+            h_1 &= 2803.2\ \mathrm{kJ/kg} \\
+            s_1 &= 6185.6\ \mathrm{J/kg \cdot K} = 6.186\ \mathrm{kJ/kg \cdot K}
+        \end{align*}
+        \item \textbf{State 2 (Extraction):} $P_2 = 500$ kPa, $s_2 = s_1$ (isentropic)
+        \begin{align*}
+            s_2 &= 6185.6\ \mathrm{J/kg \cdot K} \\
+            h_2 &= 2478.2\ \mathrm{kJ/kg}
+        \end{align*}
+        \item \textbf{State 3 (Exhaust):} $P_3 = 50$ kPa, $T_3 = 100^\circ$C
+        \begin{align*}
+            h_3 &= 2682.4\ \mathrm{kJ/kg}
+        \end{align*}
     \end{itemize}
-    \item \textbf{Power Calculation Setup:}
+    \item \textbf{Power Calculation:}
     \begin{align*}
-        \dot{W}_{\text{out}} &= (3\ \mathrm{kg/s}) h_1 - (0.36\ \mathrm{kg/s}) h_2 - (2.64\ \mathrm{kg/s}) h_3 \\
-        &= 3h_1 - 0.36h_2 - 2.64h_3 \quad [\mathrm{kW}]
+        \dot{W}_{\text{out}} &= \dot{m}_1 h_1 - \dot{m}_2 h_2 - \dot{m}_3 h_3 \\
+        &= (3.0)(2803.2) - (0.36)(2478.2) - (2.64)(2682.4) \\
+        &= 8409.6 - 892.2 - 7081.5 \\
+        &= 435.9\ \mathrm{kW}
     \end{align*}
-    \item \textbf{Note:} Use steam tables to look up $h_1$, $h_2$, and $h_3$ as needed. If isentropic, use $s_1 = s_2 = s_3$ to find the correct enthalpy values at each state.
+    \item \textbf{CLI Commands Used:}
+    \begin{itemize}
+        \item \texttt{python steam\_cli.py T P 3000000 Q 1} \quad $\rightarrow$ $T_1 = 507.0$ K
+        \item \texttt{python steam\_cli.py H P 3000000 Q 1} \quad $\rightarrow$ $h_1 = 2803.2$ kJ/kg
+        \item \texttt{python steam\_cli.py S P 3000000 Q 1} \quad $\rightarrow$ $s_1 = 6185.6$ J/kg$\cdot$K
+        \item \texttt{python steam\_cli.py H P 500000 S 6185.583126654898} \quad $\rightarrow$ $h_2 = 2478.2$ kJ/kg
+        \item \texttt{python steam\_cli.py H P 50000 T 373.15} \quad $\rightarrow$ $h_3 = 2682.4$ kJ/kg
+    \end{itemize}
 \end{itemize}
 
 
@@ -343,10 +384,19 @@ A steam turbine is operating steadily and expands a $2.5\ \mathrm{kg/s}$ stream 
     \end{enumerate}
     \item \textbf{Summary for Part A:}
     \begin{itemize}
-        \item $T_{2s} = \_$ K
-        \item $h_{2s} = \_$ kJ/kg
-        \item $x_{2s} = \_$
-        \item $s_{2s} = \_$ kJ/kg-K
+        \item $h_1 = 3231.7$ kJ/kg, $s_1 = 6.923$ kJ/kg-K (inlet properties)
+        \item $T_{2s} = 372.8$ K = $99.6^\circ$C
+        \item $h_{2s} = 2512.6$ kJ/kg
+        \item $x_{2s} = 0.928$ (92.8\% vapor)
+        \item $s_{2s} = 6.923$ kJ/kg-K (isentropic)
+    \end{itemize}
+    \item \textbf{CLI Commands Used:}
+    \begin{itemize}
+        \item \texttt{python steam\_cli.py H P 3000000 T 673.15} $\rightarrow$ $h_1 = 3231.7$ kJ/kg
+        \item \texttt{python steam\_cli.py S P 3000000 T 673.15} $\rightarrow$ $s_1 = 6923.4$ J/kg$\cdot$K
+        \item \texttt{python steam\_cli.py H P 100000 S 6923.448666758736} $\rightarrow$ $h_{2s} = 2512.6$ kJ/kg
+        \item \texttt{python steam\_cli.py T P 100000 S 6923.448666758736} $\rightarrow$ $T_{2s} = 372.8$ K
+        \item \texttt{python steam\_cli.py Q P 100000 S 6923.448666758736} $\rightarrow$ $x_{2s} = 0.928$
     \end{itemize}
 \end{itemize}
 
@@ -365,10 +415,19 @@ A steam turbine is operating steadily and expands a $2.5\ \mathrm{kg/s}$ stream 
     \end{enumerate}
     \item \textbf{Summary for Part B:}
     \begin{itemize}
-        \item $T_2 = \_$ K
-        \item $h_2 = \_$ kJ/kg
-        \item $x_2 = \_$
-        \item $s_2 = \_$ kJ/kg-K
+        \item Isentropic work: $w_s = h_1 - h_{2s} = 3231.7 - 2512.6 = 719.1$ kJ/kg
+        \item Actual work: $w_{actual} = \eta_s \times w_s = 0.85 \times 719.1 = 611.2$ kJ/kg
+        \item Actual outlet enthalpy: $h_2 = h_1 - w_{actual} = 3231.7 - 611.2 = 2620.5$ kJ/kg
+        \item $T_2 = 372.8$ K = $99.6^\circ$C
+        \item $h_2 = 2620.5$ kJ/kg
+        \item $x_2 = 0.976$ (97.6\% vapor)
+        \item $s_2 = 7.213$ kJ/kg-K
+    \end{itemize}
+    \item \textbf{CLI Commands Used:}
+    \begin{itemize}
+        \item \texttt{python steam\_cli.py T P 100000 H 2620500} $\rightarrow$ $T_2 = 372.8$ K
+        \item \texttt{python steam\_cli.py Q P 100000 H 2620500} $\rightarrow$ $x_2 = 0.976$
+        \item \texttt{python steam\_cli.py S P 100000 H 2620500} $\rightarrow$ $s_2 = 7212.8$ J/kg$\cdot$K
     \end{itemize}
 \end{itemize}
 
@@ -378,11 +437,16 @@ A steam turbine is operating steadily and expands a $2.5\ \mathrm{kg/s}$ stream 
     \item \textbf{Goal:} Calculate and compare turbine work output
     \item \textbf{Process:}
     \begin{enumerate}
-        \item Isentropic work: $w_s = h_1 - h_{2s}$
-        \item Actual work: $w_{actual} = h_1 - h_2$
-        \item Power output: $\dot{W}_s = \dot{m} w_s$, $\dot{W}_{actual} = \dot{m} w_{actual}$
-        \item Compare difference: $\Delta \dot{W} = \dot{W}_s - \dot{W}_{actual}$
-        \item Explanation: Real turbine produces less work due to irreversibilities (friction, turbulence, heat transfer within fluid). Energy lost to entropy generation. Verify: $w_{actual} = \eta_s \times w_s$
+        \item Isentropic work: $w_s = h_1 - h_{2s} = 3231.7 - 2512.6 = 719.1$ kJ/kg
+        \item Actual work: $w_{actual} = h_1 - h_2 = 3231.7 - 2620.5 = 611.2$ kJ/kg
+        \item Power output: 
+        \begin{align*}
+            \dot{W}_s &= \dot{m} w_s = 2.5 \times 719.1 = 1797.8 \text{ kW} \\
+            \dot{W}_{actual} &= \dot{m} w_{actual} = 2.5 \times 611.2 = 1528.0 \text{ kW}
+        \end{align*}
+        \item Compare difference: $\Delta \dot{W} = \dot{W}_s - \dot{W}_{actual} = 1797.8 - 1528.0 = 269.8$ kW
+        \item Verification: $w_{actual} = \eta_s \times w_s = 0.85 \times 719.1 = 611.2$ kJ/kg $\checkmark$
+        \item Explanation: Real turbine produces 15\% less work due to irreversibilities (friction, turbulence, heat transfer within fluid). Energy lost to entropy generation.
     \end{enumerate}
 \end{itemize}
 
@@ -405,7 +469,12 @@ A steam turbine is operating steadily and expands a $2.5\ \mathrm{kg/s}$ stream 
         0 + \dot{m} s_1 - \dot{m} s_2 + \dot{S}_{gen} = 0 \\
         \Rightarrow \dot{S}_{gen} = \dot{m}(s_2 - s_1)
     \end{align*}
-    \item \textbf{Check:} $\dot{S}_{gen} > 0$ for real process (confirms 2nd law)
+    \item \textbf{Calculation:}
+    \begin{align*}
+        \dot{S}_{gen} &= \dot{m}(s_2 - s_1) = 2.5 \times (7.213 - 6.923) \\
+        &= 2.5 \times 0.290 = 0.725 \text{ kW/K}
+    \end{align*}
+    \item \textbf{Check:} $\dot{S}_{gen} = 0.725 > 0$ $\checkmark$ (confirms 2nd law for real process)
 \end{itemize}
 
 \textbf{PART E: Comparison and Benefit}
@@ -419,10 +488,10 @@ A steam turbine is operating steadily and expands a $2.5\ \mathrm{kg/s}$ stream 
         \begin{tabular}{l|c|c|c}
         Property & Isentropic (A) & Real (B) & Difference \\
         \hline
-        $h_2$ (kJ/kg) & $\_$ & $\_$ & $\_$ \\
-        $s_2$ (kJ/kg-K) & $\_$ & $\_$ & $\_$ \\
-        $x_2$ (quality) & $\_$ & $\_$ & $\_$ \\
-        $T_2$ (K) & $\_$ & $\_$ & $\_$ \\
+        $h_2$ (kJ/kg) & 2512.6 & 2620.5 & +107.9 \\
+        $s_2$ (kJ/kg-K) & 6.923 & 7.213 & +0.290 \\
+        $x_2$ (quality) & 0.928 & 0.976 & +0.048 \\
+        $T_2$ (K) & 372.8 & 372.8 & 0 \\
         \end{tabular}
         \end{center}
         \item Key observation: Real turbine has higher quality ($x_2 > x_{2s}$), higher entropy ($s_2 > s_1$), higher enthalpy at exit ($h_2 > h_{2s}$)
@@ -486,13 +555,29 @@ A free piston-cylinder device is filled with $3\ \mathrm{kg}$ of a saturated liq
     \end{align*}
 \end{itemize}
 
-\textbf{Process Steps}
+\textbf{Solution}
 \begin{enumerate}
-    \item Look up steam table properties at $P = 200$ kPa (saturated pressure table): $s_f$, $s_{fg}$, $s_g$
-    \item Calculate initial specific entropy ($s_1$): $s_1 = s_f + (0.60) \cdot s_{fg}$
-    \item Identify final specific entropy ($s_2$): $s_2 = s_g$
-    \item Calculate the change: $\Delta s = s_2 - s_1$
-    \item Check your answer (units should be kJ/kg$\cdot$K)
+    \item \textbf{Look up saturated steam properties at $P = 200$ kPa using CLI:}
+    \begin{itemize}
+        \item \texttt{python steam\_cli.py S P 200000 Q 0} $\rightarrow$ $s_f = 1530.2$ J/kg$\cdot$K = $1.530$ kJ/kg$\cdot$K
+        \item \texttt{python steam\_cli.py S P 200000 Q 1} $\rightarrow$ $s_g = 7126.9$ J/kg$\cdot$K = $7.127$ kJ/kg$\cdot$K
+        \item Calculate: $s_{fg} = s_g - s_f = 7.127 - 1.530 = 5.597$ kJ/kg$\cdot$K
+    \end{itemize}
+    \item \textbf{Calculate initial specific entropy} ($x_1 = 0.60$):
+    \begin{align*}
+        s_1 &= s_f + x_1 \cdot s_{fg} = 1.530 + (0.60)(5.597) \\
+        &= 1.530 + 3.358 = 4.888\ \mathrm{kJ/kg \cdot K}
+    \end{align*}
+    \textbf{Verification:} \texttt{python steam\_cli.py S P 200000 Q 0.6} $\rightarrow$ $s_1 = 4888.2$ J/kg$\cdot$K $\checkmark$
+    \item \textbf{Identify final specific entropy} ($x_2 = 1.0$, saturated vapor):
+    \begin{align*}
+        s_2 &= s_g = 7.127\ \mathrm{kJ/kg \cdot K}
+    \end{align*}
+    \item \textbf{Calculate the specific entropy change:}
+    \begin{align*}
+        \Delta s &= s_2 - s_1 = 7.127 - 4.888 = \boxed{2.239\ \mathrm{kJ/kg \cdot K}}
+    \end{align*}
+    \item \textbf{Physical interpretation:} Positive $\Delta s$ reflects increased molecular disorder as liquid evaporates to vapor.
 \end{enumerate}
 
 
@@ -538,45 +623,37 @@ A piston–cylinder device is well insulated and contains $4.8$ L of saturated l
     \end{align*}
 \end{itemize}
 
-\textbf{Solution Process}
+\textbf{Solution}
 \begin{enumerate}
-    \item \textbf{Find initial state properties at State 1:}
+    \item \textbf{Find initial state properties at 150 kPa saturated liquid using CLI:}
     \begin{itemize}
-        \item Look up saturated liquid properties at $P_1 = 150$ kPa:
-        \item $v_1 = v_f$ @ 150 kPa (m$^3$/kg)
-        \item $h_1 = h_f$ @ 150 kPa (kJ/kg)
-        \item $s_1 = s_f$ @ 150 kPa (kJ/kg·K)
-        \item $T_{sat}$ @ 150 kPa (°C)
+        \item \texttt{python steam\_cli.py H P 150000 Q 0} $\rightarrow$ $h_1 = h_f = 467.1$ kJ/kg
+        \item \texttt{python steam\_cli.py S P 150000 Q 0} $\rightarrow$ $s_1 = s_f = 1433.7$ J/kg$\cdot$K = $1.434$ kJ/kg$\cdot$K
+        \item \texttt{python steam\_cli.py D P 150000 Q 0} $\rightarrow$ $\rho_1 = 949.9$ kg/m$^3$
+        \item Specific volume: $v_1 = 1/\rho_1 = 1/949.9 = 0.001053$ m$^3$/kg
     \end{itemize}
     \item \textbf{Calculate mass of water:}
     \begin{align*}
-        m = \frac{V_1}{v_1} = \frac{0.0048\ \text{m}^3}{v_f @ 150\ \text{kPa}}
+        m = \frac{V_1}{v_1} = \frac{0.0048\ \text{m}^3}{0.001053\ \text{m}^3/\text{kg}} = 4.558\ \text{kg}
     \end{align*}
-    \item \textbf{Apply energy balance to find State 2 enthalpy:}
+    \item \textbf{Apply energy balance to find final enthalpy:}
     \begin{align*}
-        h_2 = h_1 + \frac{Q_{in}}{m} = h_f @ 150\ \text{kPa} + \frac{1700\ \text{kJ}}{m}
+        Q_{in} &= m(h_2 - h_1) \quad \text{(constant pressure)} \\
+        h_2 &= h_1 + \frac{Q_{in}}{m} = 467.1 + \frac{1700}{4.558} \\
+        &= 467.1 + 373.0 = 840.1\ \text{kJ/kg}
     \end{align*}
-    \item \textbf{Determine State 2 condition:}
+    \item \textbf{Determine final state condition at 150 kPa:}
     \begin{itemize}
-        \item Knowing $P_2 = 150$ kPa and $h_2$ from above, compare $h_2$ to $h_f$ and $h_g$ at 150 kPa:
-        \item If $h_f < h_2 < h_g$ $\rightarrow$ two-phase mixture:
-        \begin{align*}
-            x_2 = \frac{h_2 - h_f}{h_{fg}}
-        \end{align*}
-        \item Then find entropy:
-        \begin{align*}
-            s_2 = s_f + x_2 \cdot s_{fg}
-        \end{align*}
-        \item If $h_2 > h_g$ $\rightarrow$ superheated vapor:
-        \begin{itemize}
-            \item Use superheated steam tables at $P_2 = 150$ kPa to interpolate for $s_2$ at the calculated $h_2$.
-        \end{itemize}
+        \item \texttt{python steam\_cli.py H P 150000 Q 1} $\rightarrow$ $h_g = 2693.1$ kJ/kg
+        \item Since $h_1 = 467.1 < h_2 = 840.1 < h_g = 2693.1$ $\rightarrow$ \textbf{two-phase mixture}
+        \item \texttt{python steam\_cli.py Q P 150000 H 840100} $\rightarrow$ $x_2 = 0.168$ (16.8\% vapor)
+        \item \texttt{python steam\_cli.py S P 150000 H 840100} $\rightarrow$ $s_2 = 2403.7$ J/kg$\cdot$K = $2.404$ kJ/kg$\cdot$K
     \end{itemize}
-    \item \textbf{Calculate entropy change:}
+    \item \textbf{Calculate entropy changes:}
     \begin{align*}
-        \Delta s = s_2 - s_1 = s_2 - s_f @ 150\ \text{kPa}
+        \Delta s &= s_2 - s_1 = 2.404 - 1.434 = 0.970\ \text{kJ/kg$\cdot$K} \\
+        \Delta S &= m \times \Delta s = 4.558 \times 0.970 = \boxed{4.42\ \text{kJ/K}}
     \end{align*}
-    (Result in kJ/kg·K)
 \end{enumerate}
 
 
