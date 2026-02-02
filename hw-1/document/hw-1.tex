@@ -137,9 +137,9 @@ It is assumed the system is a simple compressible system, therefore there are tw
 
 \textbf{Given:}
 \begin{itemize}
-    \item Volumetric flow rate: $\dot{V} = 500$ m³/s
+    \item Volumetric flow rate: $\dot{V} = 500$ m$^3$/s
     \item Elevation drop: $\Delta z = 85$ m
-    \item Water density: $\rho = 1000$ kg/m³ (assumed)
+    \item Water density: $\rho = 1000$ kg/m$^3$ (assumed)
 \end{itemize}
 
 \begin{enumerate}
@@ -193,8 +193,8 @@ It is assumed the system is a simple compressible system, therefore there are tw
 
 \textbf{Given:}
 \begin{itemize}
-    \item Mass of H₂ gas: $m = 3.8$ kg
-    \item Gas constant: $R = 4.124$ kJ/kg·K  
+    \item Mass of H$_2$ gas: $m = 3.8$ kg
+    \item Gas constant: $R = 4.124$ kJ/kg$\cdot$K  
     \item Initial state: $P_1 = 250$ kPa, $T_1 = 900$ K
     \item Final temperature: $T_2 = 400$ K
     \item Process: Constant pressure (heat removal)
@@ -264,11 +264,19 @@ It is assumed the system is a simple compressible system, therefore there are tw
 \end{itemize}
 \newpage
 
-\section*{8.}
+\section*{Problem 8: Centrifugal Pump Energy Balance}
 \addcontentsline{toc}{section}{Centrifugal Pump Energy Balance}
 \vspace{0.5cm}
 
-A centrifugal pump is operated steadily and consumes $10\ \mathrm{kW}$ of shaft work to move water ($1000\ \mathrm{kg/m^3}$, $C = 4.2\ \mathrm{kJ/kg\cdot K}$) at a mass flow rate of $0.05\ \mathrm{kg/s}$. The pump is not very well insulated. Temperature is measured at the inlet ($20\ ^\circ\mathrm{C}$) and the outlet ($45\ ^\circ\mathrm{C}$) of the pump. The cross sectional area at the inlet and the outlet of the pump is the same ($A_2 = A_3$).
+\textbf{Given:}
+\begin{itemize}
+    \item Shaft work: $\dot{W}_s = 10\ \mathrm{kW}$
+    \item Mass flow rate: $\dot{m} = 0.05\ \mathrm{kg/s}$
+    \item Water properties: $\rho = 1000\ \mathrm{kg/m^3}$, $C = 4.2\ \mathrm{kJ/kg\cdot K}$
+    \item Inlet temperature: $T_1 = 20^\circ\mathrm{C}$
+    \item Outlet temperature: $T_2 = 45^\circ\mathrm{C}$
+    \item Cross-sectional areas: $A_{inlet} = A_{outlet}$
+\end{itemize}
 
 \textbf{Part A: Prove that the change in kinetic energy is negligible}
 
@@ -329,24 +337,20 @@ A centrifugal pump is operated steadily and consumes $10\ \mathrm{kW}$ of shaft 
 
 \newpage
 
-\section*{9.}
+\section*{Problem 9: Isentropic Steam Turbine with Extraction}
 \addcontentsline{toc}{section}{Isentropic Steam Turbine}
 \vspace{0.5cm}
 
-A well-insulated steam turbine is operating reversibly with $3\ \mathrm{kg/s}$ of steam at a pressure of $3\ \mathrm{MPa}$. The majority of the steam is exhausted at $50\ \mathrm{kPa}$ and $100^\circ\mathrm{C}$. However, $12\%$ of this flow is diverted within the steam turbine to provide preheating for other cycle components once the inlet stream was expanded to $500\ \mathrm{kPa}$. Determine the power produced by this turbine, in kW.
-
-\textbf{Problem Setup}
+\textbf{Given:}
+\begin{itemize}
+    \item Steam inlet: $\dot{m}_1 = 3\ \mathrm{kg/s}$ at $P_1 = 3\ \mathrm{MPa}$ (saturated vapor)
+    \item Extraction: 12\% of flow at $P_2 = 500\ \mathrm{kPa}$  
+    \item Exhaust: 88\% of flow at $P_3 = 50\ \mathrm{kPa}$, $T_3 = 100^\circ\mathrm{C}$
+    \item Process: Isentropic (reversible adiabatic)
+\end{itemize}
+\textbf{Solution:}
 
 \begin{itemize}
-    \item \textbf{Given:}
-    \begin{align*}
-        \dot{m}_1 &= 3\ \mathrm{kg/s} \\
-        P_1 &= 3\ \mathrm{MPa} \\
-        P_2 &= 500\ \mathrm{kPa} \\
-        P_3 &= 50\ \mathrm{kPa} \\
-        T_3 &= 100^\circ\mathrm{C} \\
-        \text{Extraction flow fraction:} &\ 0.12
-    \end{align*}
     \item \textbf{Mass Flow Rates:}
     \begin{align*}
         \dot{m}_2 &= 0.12 \times \dot{m}_1 = 0.36\ \mathrm{kg/s} \\
@@ -387,25 +391,23 @@ A well-insulated steam turbine is operating reversibly with $3\ \mathrm{kg/s}$ o
         &= 8409.6 - 892.2 - 7081.5 \\
         &= 435.9\ \mathrm{kW}
     \end{align*}
-    \item \textbf{CLI Commands Used:}
-    \begin{itemize}
-        \item \texttt{python steam\_cli.py T P 3000000 Q 1} \quad $\rightarrow$ $T_1 = 507.0$ K
-        \item \texttt{python steam\_cli.py H P 3000000 Q 1} \quad $\rightarrow$ $h_1 = 2803.2$ kJ/kg
-        \item \texttt{python steam\_cli.py S P 3000000 Q 1} \quad $\rightarrow$ $s_1 = 6185.6$ J/kg$\cdot$K
-        \item \texttt{python steam\_cli.py H P 500000 S 6185.583126654898} \quad $\rightarrow$ $h_2 = 2478.2$ kJ/kg
-        \item \texttt{python steam\_cli.py H P 50000 T 373.15} \quad $\rightarrow$ $h_3 = 2682.4$ kJ/kg
-    \end{itemize}
+    \item \textbf{CLI Commands:} See CLI\_Commands.md for detailed property lookup commands
 \end{itemize}
-
-
 
 \newpage
 
-\section*{10.}
+\section*{Problem 10: Real Steam Turbine Entropy Analysis}
 \addcontentsline{toc}{section}{Real Devices and Entropy Balances}
 \vspace{0.5cm}
 
-A steam turbine is operating steadily and expands a $2.5\ \mathrm{kg/s}$ stream of steam/water from $3\ \mathrm{MPa}$ and $400\ ^\circ\mathrm{C}$ to $100\ \mathrm{kPa}$. Assume the turbine is well-insulated. The manufacturer performance curves indicate that under these conditions, the turbine would operate with an isentropic efficiency of $0.85$.
+\textbf{Given:}
+\begin{itemize}
+    \item Mass flow rate: $\dot{m} = 2.5\ \mathrm{kg/s}$
+    \item Inlet conditions: $P_1 = 3\ \mathrm{MPa}$, $T_1 = 400^\circ\mathrm{C}$ (superheated steam)
+    \item Outlet pressure: $P_2 = 100\ \mathrm{kPa}$
+    \item Isentropic efficiency: $\eta_s = 0.85$
+    \item Process: Adiabatic expansion ($\dot{Q} = 0$), negligible kinetic/potential energy changes
+\end{itemize}
 
 \textbf{Given:}
 \begin{itemize}
@@ -437,14 +439,6 @@ A steam turbine is operating steadily and expands a $2.5\ \mathrm{kg/s}$ stream 
         \item $x_{2s} = 0.928$ (92.8\% vapor)
         \item $s_{2s} = 6.923$ kJ/kg-K (isentropic)
     \end{itemize}
-    \item \textbf{CLI Commands Used:}
-    \begin{itemize}
-        \item \texttt{python steam\_cli.py H P 3000000 T 673.15} $\rightarrow$ $h_1 = 3231.7$ kJ/kg
-        \item \texttt{python steam\_cli.py S P 3000000 T 673.15} $\rightarrow$ $s_1 = 6923.4$ J/kg$\cdot$K
-        \item \texttt{python steam\_cli.py H P 100000 S 6923.448666758736} $\rightarrow$ $h_{2s} = 2512.6$ kJ/kg
-        \item \texttt{python steam\_cli.py T P 100000 S 6923.448666758736} $\rightarrow$ $T_{2s} = 372.8$ K
-        \item \texttt{python steam\_cli.py Q P 100000 S 6923.448666758736} $\rightarrow$ $x_{2s} = 0.928$
-    \end{itemize}
 \end{itemize}
 
 \textbf{PART B: Real Operation}
@@ -469,12 +463,6 @@ A steam turbine is operating steadily and expands a $2.5\ \mathrm{kg/s}$ stream 
         \item $h_2 = 2620.5$ kJ/kg
         \item $x_2 = 0.976$ (97.6\% vapor)
         \item $s_2 = 7.213$ kJ/kg-K
-    \end{itemize}
-    \item \textbf{CLI Commands Used:}
-    \begin{itemize}
-        \item \texttt{python steam\_cli.py T P 100000 H 2620500} $\rightarrow$ $T_2 = 372.8$ K
-        \item \texttt{python steam\_cli.py Q P 100000 H 2620500} $\rightarrow$ $x_2 = 0.976$
-        \item \texttt{python steam\_cli.py S P 100000 H 2620500} $\rightarrow$ $s_2 = 7212.8$ J/kg$\cdot$K
     \end{itemize}
 \end{itemize}
 
@@ -558,11 +546,19 @@ A steam turbine is operating steadily and expands a $2.5\ \mathrm{kg/s}$ stream 
 
 
 \newpage
-\section*{11.}
+\section*{Problem 11: Steam Quality Change in Piston-Cylinder}
 \addcontentsline{toc}{section}{Entropy Change of a Pure Substance}
 \vspace{0.5cm}
 
-A free piston-cylinder device is filled with $3\ \mathrm{kg}$ of a saturated liquid-vapor mixture of water/steam at $200\ \mathrm{kPa}$. The exterior of the tank may be assumed to be well-insulated. \textbf{Initially, 40\% of the mass is in the liquid phase} (so $x_1 = 0.60$). Heat is supplied via an electric resistance heater until all the liquid in the tank is evaporated. \textbf{Determine the specific entropy change ($\Delta s$, kJ/kg-K) of the steam inside the tank during this process.}
+\textbf{Given:}
+\begin{itemize}
+    \item System: Free piston-cylinder (constant pressure process)
+    \item Working fluid: $m = 3\ \mathrm{kg}$ of water/steam mixture
+    \item Pressure: $P = 200\ \mathrm{kPa}$ (constant throughout process)
+    \item Initial state: $x_1 = 0.60$ (40\% liquid, 60\% vapor)
+    \item Final state: $x_2 = 1.0$ (all liquid evaporated to saturated vapor)
+    \item Process: Adiabatic heating with electric resistance heater
+\end{itemize}
 
 \textbf{Given Information}
 \begin{itemize}
@@ -604,10 +600,10 @@ A free piston-cylinder device is filled with $3\ \mathrm{kg}$ of a saturated liq
 
 \textbf{Solution}
 \begin{enumerate}
-    \item \textbf{Look up saturated steam properties at $P = 200$ kPa using CLI:}
+    \item \textbf{Look up saturated steam properties at $P = 200$ kPa:}
     \begin{itemize}
-        \item \texttt{python steam\_cli.py S P 200000 Q 0} $\rightarrow$ $s_f = 1530.2$ J/kg$\cdot$K = $1.530$ kJ/kg$\cdot$K
-        \item \texttt{python steam\_cli.py S P 200000 Q 1} $\rightarrow$ $s_g = 7126.9$ J/kg$\cdot$K = $7.127$ kJ/kg$\cdot$K
+        \item $s_f = 1.530$ kJ/kg$\cdot$K (saturated liquid entropy)
+        \item $s_g = 7.127$ kJ/kg$\cdot$K (saturated vapor entropy) 
         \item Calculate: $s_{fg} = s_g - s_f = 7.127 - 1.530 = 5.597$ kJ/kg$\cdot$K
     \end{itemize}
     \item \textbf{Calculate initial specific entropy} ($x_1 = 0.60$):
@@ -615,7 +611,6 @@ A free piston-cylinder device is filled with $3\ \mathrm{kg}$ of a saturated liq
         s_1 &= s_f + x_1 \cdot s_{fg} = 1.530 + (0.60)(5.597) \\
         &= 1.530 + 3.358 = 4.888\ \mathrm{kJ/kg \cdot K}
     \end{align*}
-    \textbf{Verification:} \texttt{python steam\_cli.py S P 200000 Q 0.6} $\rightarrow$ $s_1 = 4888.2$ J/kg$\cdot$K $\checkmark$
     \item \textbf{Identify final specific entropy} ($x_2 = 1.0$, saturated vapor):
     \begin{align*}
         s_2 &= s_g = 7.127\ \mathrm{kJ/kg \cdot K}
@@ -628,11 +623,18 @@ A free piston-cylinder device is filled with $3\ \mathrm{kg}$ of a saturated liq
 \end{enumerate}
 
 
-\section*{12.}
+\section*{Problem 12: Piston-Cylinder Total Entropy Change}
 \addcontentsline{toc}{section}{Total Entropy Change in a Piston-Cylinder}
 \vspace{0.5cm}
 
-A piston–cylinder device is well insulated and contains $4.8$ L of saturated liquid ($x = 0$) water at $150$ kPa. The piston moves freely within the cylinder. An electric resistance heater inside the cylinder is suddenly turned on, and $1700$ kJ of energy is delivered to the steam. \textbf{Determine the total entropy change ($\Delta S$, kJ/kg) of the steam in the device during this process.}
+\textbf{Given:}
+\begin{itemize}
+    \item System: Well-insulated piston-cylinder with freely moving piston
+    \item Working fluid: Water (saturated liquid initially)
+    \item Initial state: $V_1 = 4.8\ \mathrm{L}$, $P_1 = 150\ \mathrm{kPa}$, $x_1 = 0$
+    \item Energy input: $Q_{in} = 1700\ \mathrm{kJ}$ from electric resistance heater
+    \item Process: Constant pressure heating (piston moves freely)
+\end{itemize}
 
 \textbf{Given Information}
 \begin{itemize}
@@ -672,11 +674,11 @@ A piston–cylinder device is well insulated and contains $4.8$ L of saturated l
 
 \textbf{Solution}
 \begin{enumerate}
-    \item \textbf{Find initial state properties at 150 kPa saturated liquid using CLI:}
+    \item \textbf{Find initial state properties at 150 kPa saturated liquid:}
     \begin{itemize}
-        \item \texttt{python steam\_cli.py H P 150000 Q 0} $\rightarrow$ $h_1 = h_f = 467.1$ kJ/kg
-        \item \texttt{python steam\_cli.py S P 150000 Q 0} $\rightarrow$ $s_1 = s_f = 1433.7$ J/kg$\cdot$K = $1.434$ kJ/kg$\cdot$K
-        \item \texttt{python steam\_cli.py D P 150000 Q 0} $\rightarrow$ $\rho_1 = 949.9$ kg/m$^3$
+        \item $h_1 = h_f = 467.1$ kJ/kg
+        \item $s_1 = s_f = 1.434$ kJ/kg$\cdot$K
+        \item $\rho_1 = 949.9$ kg/m$^3$
         \item Specific volume: $v_1 = 1/\rho_1 = 1/949.9 = 0.001053$ m$^3$/kg
     \end{itemize}
     \item \textbf{Calculate mass of water:}
@@ -691,10 +693,10 @@ A piston–cylinder device is well insulated and contains $4.8$ L of saturated l
     \end{align*}
     \item \textbf{Determine final state condition at 150 kPa:}
     \begin{itemize}
-        \item \texttt{python steam\_cli.py H P 150000 Q 1} $\rightarrow$ $h_g = 2693.1$ kJ/kg
+        \item Reference: $h_g = 2693.1$ kJ/kg (saturated vapor enthalpy)
         \item Since $h_1 = 467.1 < h_2 = 840.1 < h_g = 2693.1$ $\rightarrow$ \textbf{two-phase mixture}
-        \item \texttt{python steam\_cli.py Q P 150000 H 840100} $\rightarrow$ $x_2 = 0.168$ (16.8\% vapor)
-        \item \texttt{python steam\_cli.py S P 150000 H 840100} $\rightarrow$ $s_2 = 2403.7$ J/kg$\cdot$K = $2.404$ kJ/kg$\cdot$K
+        \item Quality: $x_2 = 0.168$ (16.8\% vapor)
+        \item Final entropy: $s_2 = 2.404$ kJ/kg$\cdot$K
     \end{itemize}
     \item \textbf{Calculate entropy changes:}
     \begin{align*}
@@ -706,21 +708,49 @@ A piston–cylinder device is well insulated and contains $4.8$ L of saturated l
 
 
 
-\section*{13.}
+\section*{Problem 13: Solar Energy Storage Entropy Analysis}
 \addcontentsline{toc}{section}{Entropy Changes: Incompressible Substances and Ideal Gases}
 \vspace{0.5cm}
 
-Two solar receivers are proposed for storing concentrated solar energy as heat in either solid ceramic particles (CARBOBEAD CP, $\rho = 3270$ kg/m$^3$, $C \approx 1.3$ kJ/kg·K up to 1100$^\circ$C) or compressed air. Both receivers are designed to heat their respective materials from 250$^\circ$C to 1100$^\circ$C. Compressed air is introduced into the one receiver at a mass flow rate of $0.75$ kg/s, 250$^\circ$C, and 4000 kPa. The heated air in the receiver is then expanded reversibly through a well-insulated turbine to an environmental pressure of 100 kPa. Assume table A-17 is populated with a reference state of 0 K and 100 kPa and the gas constant for air is $R = 0.287$ kJ/kg·K.\par
-\textbf{Make sure you clearly label additional assumptions used to solve the problem.}
-
-\textbf{State Points and Assumptions:}
+\textbf{Given:}
 \begin{itemize}
-    \item Ceramic particles: State 1 (250$^\circ$C = 523.15 K) $\rightarrow$ State 2 (1100$^\circ$C = 1373.15 K)
-    \item Air: State 3 (250$^\circ$C, 4000 kPa) $\rightarrow$ State 4 (1100$^\circ$C, $P_4 \approx P_3$) $\rightarrow$ State 5 (isentropic expansion to 100 kPa)
-    \item \textit{Assumptions:} Negligible pressure drop in receiver ($P_4 = P_3$), reversible turbine process, steady flow
+    \item \textbf{Ceramic Particles (CARBOBEAD CP):}
+    \begin{itemize}
+        \item Density: $\rho = 3270\ \mathrm{kg/m^3}$
+        \item Specific heat: $C = 1.3\ \mathrm{kJ/kg\cdot K}$
+        \item Temperature range: $T_1 = 250^\circ\mathrm{C}$ to $T_2 = 1100^\circ\mathrm{C}$
+    \end{itemize}
+    \item \textbf{Compressed Air System:}
+    \begin{itemize}
+        \item Mass flow rate: $\dot{m} = 0.75\ \mathrm{kg/s}$
+        \item Inlet conditions: $T_3 = 250^\circ\mathrm{C}$, $P_3 = 4000\ \mathrm{kPa}$
+        \item Heating: $T_4 = 1100^\circ\mathrm{C}$ at constant pressure
+        \item Turbine expansion: Isentropic to $P_5 = 100\ \mathrm{kPa}$
+    \end{itemize}
+    \item \textbf{Air Properties:} Gas constant $R = 0.287\ \mathrm{kJ/kg\cdot K}$
 \end{itemize}
 
-\textbf{PART A: Change in specific entropy (kJ/kg·K) of ceramic particles from 1 $\rightarrow$ 2}
+\textbf{Assumptions:}
+\begin{itemize}
+    \item \textbf{Ceramic Particles (CARBOBEAD CP):}
+    \begin{itemize}
+        \item Incompressible solid with constant specific heat ($C = 1.3$ kJ/kg$\cdot$K)
+        \item Uniform heating from $250^\circ\mathrm{C}$ to $1100^\circ\mathrm{C}$
+        \item Negligible thermal expansion effects
+    \end{itemize}
+    \item \textbf{Compressed Air System:}
+    \begin{itemize}
+        \item Ideal gas behavior with constant gas constant ($R = 0.287$ kJ/kg$\cdot$K)
+        \item Negligible pressure drop in solar receiver ($P_4 = P_3 = 4000$ kPa)
+        \item Constant pressure heating process (3$\rightarrow$4)
+        \item Reversible adiabatic (isentropic) turbine expansion (4$\rightarrow$5)
+        \item Steady flow conditions throughout
+    \end{itemize}
+    \item \textbf{Reference State:} Table A-17 reference at 0 K and 100 kPa
+    \item \textbf{Negligible Effects:} Kinetic and potential energy changes, heat losses
+\end{itemize}
+
+\textbf{PART A: Change in specific entropy (kJ/kg$\cdot$K) of ceramic particles from 1 $\rightarrow$ 2}
 
 For an incompressible substance with constant specific heat:
 \begin{align*}
@@ -730,7 +760,7 @@ For an incompressible substance with constant specific heat:
     &= \boxed{1.254\ \mathrm{kJ/kg \cdot K}}
 \end{align*}
 
-\textbf{PART B: Change in specific entropy (kJ/kg·K) of compressed air from 3 $\rightarrow$ 4}
+\textbf{PART B: Change in specific entropy (kJ/kg$\cdot$K) of compressed air from 3 $\rightarrow$ 4}
 
 Using CoolProp for air property calculations:
 \begin{itemize}
@@ -745,13 +775,7 @@ Using CoolProp for air property calculations:
     \Delta s_{3\rightarrow4} &= 4.469 - 3.390 = \boxed{1.079\ \mathrm{kJ/kg \cdot K}}
 \end{align*}
 
-\textbf{CLI Commands:}
-\begin{itemize}
-    \item \texttt{python coolprop\_cli.py S P 4000000 T 523.15 Air} $\rightarrow$ $s_3 = 3389.9$ J/kg$\cdot$K
-    \item \texttt{python coolprop\_cli.py S P 4000000 T 1373.15 Air} $\rightarrow$ $s_4 = 4468.7$ J/kg$\cdot$K
-\end{itemize}
-
-\textbf{PART C: Specific entropy (kJ/kg·K) of air at state 4}
+\textbf{PART C: Specific entropy (kJ/kg$\cdot$K) of air at state 4}
 
 From Part B calculation:
 \begin{align*}
@@ -762,23 +786,17 @@ From Part B calculation:
 
 For isentropic expansion ($s_5 = s_4$), solve for $T_5$ at $P_5 = 100$ kPa:
 \begin{itemize}
-    \item \textbf{Solve using property solver:} Find $T_5$ where $s_5 = 4468.7$ J/kg$\cdot$K at $P_5 = 100$ kPa
-    \item \texttt{python property\_solver.py S 4468.7 P 100000 T 300 1500 Air} $\rightarrow$ $T_5 = 529.7$ K
+    \item \textbf{Iterative Solution:} Using property\_solver.py to find $T_5$ where $s_5 = 4468.7$ J/kg$\cdot$K at $P_5 = 100$ kPa
+    \item \textbf{Result:} $T_5 = 529.7$ K
 \end{itemize}
 
-\textbf{Calculate turbine work:}
+\textbf{Enthalpy Calculations:} Using CoolProp CLI for property lookup:
 \begin{align*}
     h_4 &= 1612.8\ \mathrm{kJ/kg} \quad \text{(at 1373.15 K, 4000 kPa)} \\
     h_5 &= 660.1\ \mathrm{kJ/kg} \quad \text{(at 529.7 K, 100 kPa)} \\
     w_t &= h_4 - h_5 = 1612.8 - 660.1 = 952.7\ \mathrm{kJ/kg} \\
     \dot{W}_{turb} &= \dot{m} \times w_t = 0.75 \times 952.7 = \boxed{714.5\ \mathrm{kW}}
 \end{align*}
-
-\textbf{CLI Commands:}
-\begin{itemize}
-    \item \texttt{python coolprop\_cli.py H P 4000000 T 1373.15 Air} $\rightarrow$ $h_4 = 1612783$ J/kg
-    \item \texttt{python coolprop\_cli.py H P 100000 T 529.688 Air} $\rightarrow$ $h_5 = 660057$ J/kg
-\end{itemize}
 
 \textbf{Solution Summary}
 \begin{enumerate}
@@ -799,22 +817,52 @@ For isentropic expansion ($s_5 = s_4$), solve for $T_5$ at $P_5 = 100$ kPa:
 
 \newpage
 
-\section*{14.}
+\section*{Problem 14: Concentrated Solar Power Carnot Analysis}
 \addcontentsline{toc}{section}{Carnot Cycle Heat Engines}
 \vspace{0.5cm}
 
-The performance of an ideal concentrated solar power plant can be modeled as the combined efficiency of a (1) solar receiver and (2) Carnot heat engine. The solar receiver absorbs concentrated solar resources and delivers them as heat to a power cycle. The total ideal system efficiency is the product of the receiver efficiency and the heat engine efficiency in converting incident solar resources into work.
-
-\textbf{Given Information}
+\textbf{Given:}
 \begin{itemize}
-    \item Concentration ratios ($C$): 100, 500, 1000, 2000, 3000 suns
-    \item Solar irradiance ($I$): 1000 W/m$^2$
-    \item Stefan-Boltzmann constant ($\sigma$): $5.67 \times 10^{-8}$ W/(m$^2$·K$^4$)
-    \item Cold reservoir temperature ($T_L$): Assume ambient $\approx 300$ K
-    \item Hot reservoir temperature range ($T_H$): 300 K to 2600 K
+    \item \textbf{Solar Concentrator System:}
+    \begin{itemize}
+        \item Concentration ratios: $C = 100, 500, 1000, 2000, 3000$ suns
+        \item Solar irradiance: $I = 1000\ \mathrm{W/m^2}$
+        \item Stefan-Boltzmann constant: $\sigma = 5.67 \times 10^{-8}\ \mathrm{W/(m^2\cdot K^4)}$
+    \end{itemize}
+    \item \textbf{Carnot Heat Engine:}
+    \begin{itemize}
+        \item Cold reservoir: $T_L = 300\ \mathrm{K}$ (ambient temperature)
+        \item Hot reservoir: $T_H$ varies (300 K to 2600 K)
+    \end{itemize}
+    \item \textbf{Analysis Scope:} Combined receiver-engine efficiency optimization
+\end{itemize}
+
+\textbf{Assumptions:}
+\begin{itemize}
+    \item \textbf{Ideal Carnot cycle:} Reversible processes, no irreversibilities in heat engine
+    \item \textbf{Steady-state operation:} Constant solar irradiance and ambient conditions
+    \item \textbf{Perfect solar concentration:} All concentrated solar energy reaches receiver surface
+    \item \textbf{Black-body radiation:} Receiver emits according to Stefan-Boltzmann law
+    \item \textbf{Ambient cold reservoir:} $T_L = 300$ K (environmental heat sink)
+    \item \textbf{Negligible convection losses:} Only radiative losses from receiver considered
+    \item \textbf{Uniform receiver temperature:} Isothermal hot reservoir at $T_H$
 \end{itemize}
 
 \textbf{PART A: Plot Total Efficiency}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../images/carnot_efficiency_plot.pdf}
+    \caption{Total system efficiency vs hot reservoir temperature for different concentration ratios. Optimal operating points are marked with circles.}
+    \label{fig:carnot_efficiency}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../images/carnot_components_plot.pdf}
+    \caption{Component efficiencies: (top) Solar receiver efficiency decreases with temperature due to radiation losses, (bottom) Carnot heat engine efficiency increases with temperature.}
+    \label{fig:carnot_components}
+\end{figure}
 
 \textbf{Relevant Equations}
 \begin{itemize}
@@ -836,8 +884,8 @@ The performance of an ideal concentrated solar power plant can be modeled as the
 \textbf{Solution using Python Analysis}
 
 \begin{itemize}
-    \item \textbf{Python Script:} Created \texttt{carnot\_simple.py} to calculate optimal operating points
-    \item \textbf{Method:} Scanned temperature range 350-2600 K to find maximum $\eta_{total}$ for each concentration ratio
+    \item \textbf{Python Scripts:} carnot\_simple.py for optimization, carnot\_plotter.py for visualization
+    \item \textbf{Method:} Temperature optimization scan to find maximum $\eta_{total}$ for each concentration ratio
 \end{itemize}
 
 \textbf{Results - Optimal Operating Conditions:}
@@ -845,7 +893,7 @@ The performance of an ideal concentrated solar power plant can be modeled as the
 \begin{center}
 \begin{tabular}{c|c|c|c|c|c}
 \toprule
-$C$ [suns] & $T_{H,opt}$ [K] & $T_{H,opt}$ [°C] & $\eta_{total,max}$ & $\eta_{receiver}$ & $\eta_{Carnot}$ \\
+$C$ [suns] & $T_{H,opt}$ [K] & $T_{H,opt}$ [$^\circ$C] & $\eta_{total,max}$ & $\eta_{receiver}$ & $\eta_{Carnot}$ \\
 \midrule
 100 & 719 & 446 & 49.4\% & 84.8\% & 58.3\% \\
 500 & 971 & 698 & 62.1\% & 89.9\% & 69.1\% \\
@@ -880,8 +928,8 @@ $T_H$ [K] & $C=100$ & $C=500$ & $C=1000$ & $C=2000$ & $C=3000$ \\
 \begin{enumerate}
     \item \textbf{Optimal Temperature Increases with Concentration:}
     \begin{itemize}
-        \item $C = 100$ suns: $T_{H,opt} = 719$ K (446°C)
-        \item $C = 3000$ suns: $T_{H,opt} = 1366$ K (1093°C)
+        \item $C = 100$ suns: $T_{H,opt} = 719$ K (446$^\circ$C)
+        \item $C = 3000$ suns: $T_{H,opt} = 1366$ K (1093$^\circ$C)
         \item Higher concentration allows operation at higher temperatures
     \end{itemize}
     
@@ -892,6 +940,85 @@ $T_H$ [K] & $C=100$ & $C=500$ & $C=1000$ & $C=2000$ & $C=3000$ \\
         \item Improvement of 23.5 percentage points
     \end{itemize}
     
+    \item \textbf{Physical Trade-offs:}
+    \begin{itemize}
+        \item Carnot efficiency increases with $T_H$: $\eta_{Carnot} = 1 - T_L/T_H$
+        \item Receiver efficiency decreases with $T_H$: $\eta_{receiver} = 1 - \sigma T_H^4/(C \cdot I)$
+        \item Optimal point balances these competing effects
+        \item Higher concentration shifts optimum to higher temperatures and efficiencies
+    \end{itemize}
+\end{enumerate}
+
+\newpage
+\textbf{Python Code Implementation}
+
+The analysis was performed using custom Python scripts for accurate calculations:
+
+\begin{verbatim}
+#!/usr/bin/env python3
+"""
+Problem 14: Carnot Cycle Heat Engines - Analysis
+"""
+
+import math
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Physical constants
+SIGMA = 5.67e-8  # Stefan-Boltzmann constant [W/(m^2\cdot K^4)]
+I = 1000  # Solar irradiance [W/m^2]
+T_L = 300  # Cold reservoir temperature [K]
+
+# Concentration ratios [suns]
+concentration_ratios = [100, 500, 1000, 2000, 3000]
+
+def receiver_efficiency(T_H, C):
+    """Calculate receiver efficiency: eta_receiver = 1 - sigma*T_H^4/(C*I)"""
+    return 1 - (SIGMA * T_H**4) / (C * I)
+
+def carnot_efficiency(T_H, T_L):
+    """Calculate Carnot heat engine efficiency: eta_Carnot = 1 - T_L/T_H"""
+    return 1 - T_L / T_H
+
+def total_efficiency(T_H, C, T_L):
+    """Calculate total system efficiency: eta_total = eta_receiver x eta_Carnot"""
+    eta_recv = receiver_efficiency(T_H, C)
+    eta_carnot = carnot_efficiency(T_H, T_L)
+    if eta_recv <= 0:  # Invalid operating regime
+        return 0
+    return eta_recv * eta_carnot
+
+def find_optimal_temperature(C, T_L):
+    """Find optimal temperature by scanning the valid range"""
+    T_range = np.arange(T_L + 50, 2601, 1)  # 350K to 2600K
+    
+    max_efficiency = -1
+    optimal_T_H = T_L + 50
+    
+    for T_H in T_range:
+        eta = total_efficiency(T_H, C, T_L)
+        if eta > max_efficiency:
+            max_efficiency = eta
+            optimal_T_H = T_H
+    
+    return float(optimal_T_H), max_efficiency
+
+# Find optimal conditions for each concentration ratio
+for C in concentration_ratios:
+    T_opt, eta_opt = find_optimal_temperature(C, T_L)
+    print(f"C = {C:4d} suns: T_opt = {T_opt:6.1f} K, "
+          f"eta_max = {eta_opt:5.1%}")
+\end{verbatim}
+
+\textbf{Command Line Execution:}
+\begin{verbatim}
+$ python carnot_simple.py      # Analysis and optimization
+$ python carnot_plotter.py     # Generate efficiency plots
+\end{verbatim}
+
+\textbf{Key Insights from Analysis:}
+
+\begin{enumerate}
     \item \textbf{Physical Trade-offs:}
     \begin{itemize}
         \item \textbf{Carnot efficiency} increases with $T_H$ (better thermodynamic limit)
