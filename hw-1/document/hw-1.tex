@@ -666,60 +666,87 @@ A piston–cylinder device is well insulated and contains $4.8$ L of saturated l
 Two solar receivers are proposed for storing concentrated solar energy as heat in either solid ceramic particles (CARBOBEAD CP, $\rho = 3270$ kg/m$^3$, $C \approx 1.3$ kJ/kg·K up to 1100$^\circ$C) or compressed air. Both receivers are designed to heat their respective materials from 250$^\circ$C to 1100$^\circ$C. Compressed air is introduced into the one receiver at a mass flow rate of $0.75$ kg/s, 250$^\circ$C, and 4000 kPa. The heated air in the receiver is then expanded reversibly through a well-insulated turbine to an environmental pressure of 100 kPa. Assume table A-17 is populated with a reference state of 0 K and 100 kPa and the gas constant for air is $R = 0.287$ kJ/kg·K.\par
 \textbf{Make sure you clearly label additional assumptions used to solve the problem.}
 
-\textbf{PART A: Change in specific entropy (kJ/kg·K) of the particle curtain from 1 $\rightarrow$ 2}
+\textbf{State Points and Assumptions:}
+\begin{itemize}
+    \item Ceramic particles: State 1 (250$^\circ$C = 523.15 K) $\rightarrow$ State 2 (1100$^\circ$C = 1373.15 K)
+    \item Air: State 3 (250$^\circ$C, 4000 kPa) $\rightarrow$ State 4 (1100$^\circ$C, $P_4 \approx P_3$) $\rightarrow$ State 5 (isentropic expansion to 100 kPa)
+    \item \textit{Assumptions:} Negligible pressure drop in receiver ($P_4 = P_3$), reversible turbine process, steady flow
+\end{itemize}
+
+\textbf{PART A: Change in specific entropy (kJ/kg·K) of ceramic particles from 1 $\rightarrow$ 2}
 
 For an incompressible substance with constant specific heat:
 \begin{align*}
-    \Delta s_{1\rightarrow2} &= C \ln\left(\frac{T_2}{T_1}\right)
+    \Delta s_{1\rightarrow2} &= C \ln\left(\frac{T_2}{T_1}\right) \\
+    &= 1.3\ \mathrm{kJ/kg \cdot K} \times \ln\left(\frac{1373.15}{523.15}\right) \\
+    &= 1.3 \times \ln(2.625) = 1.3 \times 0.965 \\
+    &= \boxed{1.254\ \mathrm{kJ/kg \cdot K}}
 \end{align*}
-Where $C = 1.3$ kJ/kg·K, $T_1$ and $T_2$ in K.\par
-\textit{Assumption:} Initial and final temperatures of the ceramic particles must be specified or reasonably assumed.
 
-\textbf{PART B: Change in specific entropy (kJ/kg·K) of the compressed air stream from 3 $\rightarrow$ 4}
+\textbf{PART B: Change in specific entropy (kJ/kg·K) of compressed air from 3 $\rightarrow$ 4}
 
-For an ideal gas using Table A-17:
-\begin{align*}
-    \Delta s_{3\rightarrow4} &= s^\circ(T_4) - s^\circ(T_3) - R \ln\left(\frac{P_4}{P_3}\right)
-\end{align*}
-Where $R = 0.287$ kJ/kg·K.\par
-\textit{Assumption:} $P_4$ at the receiver outlet is likely $\approx P_3$ if pressure drop is negligible.
-
-\textbf{PART C: Specific entropy (kJ/kg·K) of the compressed air stream for state 4}
+Using CoolProp for air property calculations:
+\begin{itemize}
+    \item \textbf{State 3:} $T_3 = 523.15$ K, $P_3 = 4000$ kPa
+    \item \textbf{State 4:} $T_4 = 1373.15$ K, $P_4 = 4000$ kPa (constant pressure heating)
+\end{itemize}
 
 \begin{align*}
-    s_4 = s^\circ(T_4) - R \ln\left(\frac{P_4}{P_0}\right)
+    \Delta s_{3\rightarrow4} &= s_4 - s_3 \\
+    s_3 &= 3389.9\ \mathrm{J/kg \cdot K} = 3.390\ \mathrm{kJ/kg \cdot K} \\
+    s_4 &= 4468.7\ \mathrm{J/kg \cdot K} = 4.469\ \mathrm{kJ/kg \cdot K} \\
+    \Delta s_{3\rightarrow4} &= 4.469 - 3.390 = \boxed{1.079\ \mathrm{kJ/kg \cdot K}}
 \end{align*}
-Where $P_0 = 100$ kPa (reference pressure).\par
-\textit{Assumption:} Use $P_4$ from Part B.
 
-\textbf{PART D: Work (kW) produced via the turbine from 4 $\rightarrow$ 5}
+\textbf{CLI Commands:}
+\begin{itemize}
+    \item \texttt{python coolprop\_cli.py S P 4000000 T 523.15 Air} $\rightarrow$ $s_3 = 3389.9$ J/kg$\cdot$K
+    \item \texttt{python coolprop\_cli.py S P 4000000 T 1373.15 Air} $\rightarrow$ $s_4 = 4468.7$ J/kg$\cdot$K
+\end{itemize}
 
-For a reversible adiabatic turbine, using SFEE:
+\textbf{PART C: Specific entropy (kJ/kg·K) of air at state 4}
+
+From Part B calculation:
 \begin{align*}
-    \dot{W}_{turb} = \dot{m}(h_4 - h_5)
+    s_4 = \boxed{4.469\ \mathrm{kJ/kg \cdot K}}
 \end{align*}
-Where $\dot{m} = 0.75$ kg/s.\par
-\textit{Process:}
+
+\textbf{PART D: Work (kW) produced via turbine from 4 $\rightarrow$ 5}
+
+For isentropic expansion ($s_5 = s_4$), solve for $T_5$ at $P_5 = 100$ kPa:
+\begin{itemize}
+    \item \textbf{Solve using property solver:} Find $T_5$ where $s_5 = 4468.7$ J/kg$\cdot$K at $P_5 = 100$ kPa
+    \item \texttt{python property\_solver.py S 4468.7 P 100000 T 300 1500 Air} $\rightarrow$ $T_5 = 529.7$ K
+\end{itemize}
+
+\textbf{Calculate turbine work:}
+\begin{align*}
+    h_4 &= 1612.8\ \mathrm{kJ/kg} \quad \text{(at 1373.15 K, 4000 kPa)} \\
+    h_5 &= 660.1\ \mathrm{kJ/kg} \quad \text{(at 529.7 K, 100 kPa)} \\
+    w_t &= h_4 - h_5 = 1612.8 - 660.1 = 952.7\ \mathrm{kJ/kg} \\
+    \dot{W}_{turb} &= \dot{m} \times w_t = 0.75 \times 952.7 = \boxed{714.5\ \mathrm{kW}}
+\end{align*}
+
+\textbf{CLI Commands:}
+\begin{itemize}
+    \item \texttt{python coolprop\_cli.py H P 4000000 T 1373.15 Air} $\rightarrow$ $h_4 = 1612783$ J/kg
+    \item \texttt{python coolprop\_cli.py H P 100000 T 529.688 Air} $\rightarrow$ $h_5 = 660057$ J/kg
+\end{itemize}
+
+\textbf{Solution Summary}
 \begin{enumerate}
-    \item Look up $h_4$ at $T_4 = 1373$ K from Table A-17
-    \item For reversible (isentropic) expansion: $s_5 = s_4$
-    \item With $s_5 = s_4$ and $P_5 = 100$ kPa, find $T_5$ such that $s^\circ(T_5) = s_4$
-    \item Look up $h_5$ at $T_5$ from Table A-17
-    \item Calculate $h_4 - h_5$
-    \item Multiply by mass flow rate to get power in kW
+    \item \textbf{Ceramic Particles:} $\Delta s_{1\rightarrow2} = 1.254$ kJ/kg$\cdot$K (heating from 250$^\circ$C to 1100$^\circ$C)
+    \item \textbf{Air Entropy Change:} $\Delta s_{3\rightarrow4} = 1.079$ kJ/kg$\cdot$K (constant pressure heating)
+    \item \textbf{Air Entropy at State 4:} $s_4 = 4.469$ kJ/kg$\cdot$K 
+    \item \textbf{Turbine Work:} $\dot{W}_{turb} = 714.5$ kW (isentropic expansion from 4000 kPa to 100 kPa)
 \end{enumerate}
 
-\textbf{Summary of Solution Process}
-\begin{enumerate}
-    \item Identify all state points and list known properties (T, P) for each
-    \item State assumptions clearly (e.g., $P_4 \approx P_3$, reversible processes, reference states)
-    \item Use Table A-17 for all air property lookups ($s^\circ$, $h$)
-    \item For incompressible substances: $\Delta s = C \ln(T_2/T_1)$
-    \item For ideal gases: $s = s^\circ(T) - R \ln(P/P_0)$
-    \item For turbine work: Apply SFEE with isentropic constraint ($s_5 = s_4$)
-    \item Check signs: Heating $\rightarrow$ $+\Delta s$, Cooling $\rightarrow$ $-\Delta s$; Turbine $\rightarrow$ $+W$ (work out)
-    \item Units: Keep everything in kJ, kg, K, kPa throughout
-\end{enumerate}
+\textbf{Key Tools Used:}
+\begin{itemize}
+    \item \textbf{CoolProp CLI:} For accurate air property calculations instead of Table A-17 approximations
+    \item \textbf{Property Solver:} Iterative tool to find $T_5$ where $s_5 = s_4$ for isentropic expansion
+    \item \textbf{Incompressible Substance Formula:} $\Delta s = C \ln(T_2/T_1)$ for ceramic particles
+\end{itemize}
 
 
 
