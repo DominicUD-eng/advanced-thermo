@@ -18,6 +18,8 @@
 \usepackage{geometry}
 \usepackage{setspace}
 \usepackage{fancyhdr}
+\usepackage{tcolorbox}
+\usepackage{xcolor}
 \usepackage{pdflscape}  % For landscape orientation
 \usepackage{xcolor}     % For colors
 \usepackage{colortbl}   % For colored table rows
@@ -43,14 +45,49 @@
 \begin{titlepage}
     \centering
     \vspace*{2cm}
-    {\LARGE\bfseries Advanced Thermodynamics Homework\\[1.5cm]}
-    {\large Assignment: \underline{\hspace{6cm}} \\[1cm]}
-    {\large Name: \underline{\hspace{7cm}} \\[1cm]}
-    {\large Date: \underline{\hspace{7cm}} \\[2cm]}
+    
+    % University/Institution (if applicable)
+    % {\large University Name \\[0.5cm]}
+    
+    {\LARGE\bfseries Advanced Thermodynamics\\[0.5cm]}
+    {\Large Homework Assignment \#1\\[2cm]}
+    
+    % Problem summary box
+    \begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,width=0.8\textwidth]
+        \centering
+        \textbf{Assignment Overview}\\[0.5cm]
+        Problems 1-14: Fundamental thermodynamic concepts, energy balances, entropy analysis, steam turbines, Carnot cycles, and concentrated solar power optimization
+    \end{tcolorbox}
+    
+    \vspace{2cm}
+    
+    % Student information
+    {\large \textbf{Student:} Dominic \\[1cm]}
+    
+    % Course information (if applicable)
+    % {\large \textbf{Course:} ME XXX - Advanced Thermodynamics \\[0.5cm]}
+    % {\large \textbf{Instructor:} Prof. [Name] \\[1cm]}
+    
+    {\large \textbf{Submitted:} February 1, 2026 \\[2cm]}
+    
+    % Computational tools box
+    \begin{tcolorbox}[colback=green!5!white,colframe=green!75!black,width=0.8\textwidth]
+        \centering
+        \textbf{Computational Tools Developed}\\[0.5cm]
+        • CoolProp CLI for multi-fluid property lookup\\
+        • Property solver for iterative thermodynamic calculations\\
+        • Carnot cycle optimization analysis\\
+        • Steam turbine performance analysis
+    \end{tcolorbox}
+    
+    \vspace{\fill}
 \end{titlepage}
+
+\newpage
 
 % Table of contents
 \tableofcontents
+\newpage
 
 
 
@@ -95,11 +132,15 @@ It is assumed the system is a simple compressible system, therefore there are tw
 
 \newpage
 
-\section*{6.}
-\addcontentsline{toc}{section}{First Law}
-\vspace{0.5cm}
+\section{Problem 6: Hydro Storage System Energy Analysis}
+\addcontentsline{toc}{section}{Problem 6: Hydro Storage System}
 
-A pumped hydro storage system is drained to extract stored energy on-demand. Water is drained toward a lower lake and a volumetric flow rate of $Q = 500\ \mathrm{m}^3/\mathrm{s}$ with an $\Delta z = 85\ \mathrm{m}$ drop in elevation.
+\textbf{Given:}
+\begin{itemize}
+    \item Volumetric flow rate: $\dot{V} = 500$ m³/s
+    \item Elevation drop: $\Delta z = 85$ m
+    \item Water density: $\rho = 1000$ kg/m³ (assumed)
+\end{itemize}
 
 \begin{enumerate}
     \item[(a)] \textbf{Maximum possible power with upper reservoir as a lake ($V_1 = 0$):}
@@ -147,11 +188,17 @@ A pumped hydro storage system is drained to extract stored energy on-demand. Wat
 
 
 
-\section*{7.}
-\addcontentsline{toc}{section}{Piston-Cylinder Energy Balance}
-\vspace{0.5cm}
+\section{Problem 7: Piston-Cylinder Energy Balance}
+\addcontentsline{toc}{section}{Problem 7: Piston-Cylinder System}
 
-A piston-cylinder system is filled with $3.8\ \mathrm{kg}$ of H$_2$ gas ($R = 4.124\ \mathrm{kJ/kg\cdot K}$) and is initially at $250\ \mathrm{kPa}$ and $900\ \mathrm{K}$. Heat is removed from the system until it reaches $400\ \mathrm{K}$. $C_v(T)$ and $C_p(T)$ are plotted as functions of temperature for this gas.
+\textbf{Given:}
+\begin{itemize}
+    \item Mass of H₂ gas: $m = 3.8$ kg
+    \item Gas constant: $R = 4.124$ kJ/kg·K  
+    \item Initial state: $P_1 = 250$ kPa, $T_1 = 900$ K
+    \item Final temperature: $T_2 = 400$ K
+    \item Process: Constant pressure (heat removal)
+\end{itemize}
 
 \textbf{Part A: Find the change in volume ($\mathrm{m}^3$) of the system.}
 
@@ -786,47 +833,93 @@ The performance of an ideal concentrated solar power plant can be modeled as the
     \end{align*}
 \end{itemize}
 
-\textbf{Process for Part A}
-\begin{enumerate}
-    \item For each concentration ratio $C$ (100, 500, 1000, 2000, 3000):
-    \begin{itemize}
-        \item Create array of $T_H$ values from 300 K to 2600 K (increment 25--50 K)
-        \item For each $T_H$, calculate:
-        \begin{itemize}
-            \item $\eta_{receiver} = 1 - (5.67\times10^{-8} \times T_H^4) / (C \times 1000)$
-            \item $\eta_{Carnot,HE} = 1 - (300 / T_H)$
-            \item $\eta_{Total} = \eta_{receiver} \times \eta_{Carnot,HE}$
-        \end{itemize}
-    \end{itemize}
-    \item Plot $\eta_{Total}$ (y-axis) vs $T_H$ (x-axis) with 5 curves (one for each $C$ value)
-    \item Label axes, add legend showing $C$ values
-    \item Submit plot and code
-\end{enumerate}
+\textbf{Solution using Python Analysis}
+
+\begin{itemize}
+    \item \textbf{Python Script:} Created \texttt{carnot\_simple.py} to calculate optimal operating points
+    \item \textbf{Method:} Scanned temperature range 350-2600 K to find maximum $\eta_{total}$ for each concentration ratio
+\end{itemize}
+
+\textbf{Results - Optimal Operating Conditions:}
+
+\begin{center}
+\begin{tabular}{c|c|c|c|c|c}
+\toprule
+$C$ [suns] & $T_{H,opt}$ [K] & $T_{H,opt}$ [°C] & $\eta_{total,max}$ & $\eta_{receiver}$ & $\eta_{Carnot}$ \\
+\midrule
+100 & 719 & 446 & 49.4\% & 84.8\% & 58.3\% \\
+500 & 971 & 698 & 62.1\% & 89.9\% & 69.1\% \\
+1000 & 1107 & 834 & 66.7\% & 91.5\% & 72.9\% \\
+2000 & 1263 & 990 & 70.7\% & 92.8\% & 76.2\% \\
+3000 & 1366 & 1093 & 72.9\% & 93.4\% & 78.0\% \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Sample Data for Plotting:}
+
+\begin{center}
+\begin{tabular}{c|c|c|c|c|c}
+\toprule
+$T_H$ [K] & $C=100$ & $C=500$ & $C=1000$ & $C=2000$ & $C=3000$ \\
+\midrule
+500 & 0.386 & 0.397 & 0.399 & 0.399 & 0.400 \\
+750 & 0.492 & 0.578 & 0.589 & 0.595 & 0.596 \\
+1000 & 0.303 & 0.621 & 0.660 & 0.680 & 0.687 \\
+1250 & -- & 0.550 & 0.655 & 0.707 & 0.725 \\
+1500 & -- & 0.341 & 0.570 & 0.685 & 0.723 \\
+1750 & -- & -- & 0.388 & 0.608 & 0.682 \\
+2000 & -- & -- & 0.079 & 0.464 & 0.593 \\
+\bottomrule
+\end{tabular}
+\end{center}
 
 \textbf{PART B: Identify Optimal Receiver Temperature}
 
+\textbf{Key Trends Observed:}
 \begin{enumerate}
-    \item From the plots in Part A, identify the $T_H$ that gives maximum $\eta_{Total}$ for each $C$ value
-    \item Comment on trends:
+    \item \textbf{Optimal Temperature Increases with Concentration:}
     \begin{itemize}
-        \item How does optimal $T_H$ change with concentration ratio $C$?
-        \item What physical trade-offs are happening?
-            \begin{itemize}
-                \item Higher $T_H$ $\rightarrow$ Better Carnot efficiency BUT worse receiver efficiency (more radiation losses)
-                \item Higher $C$ $\rightarrow$ Can operate at higher $T_H$ before radiation losses dominate
-            \end{itemize}
+        \item $C = 100$ suns: $T_{H,opt} = 719$ K (446°C)
+        \item $C = 3000$ suns: $T_{H,opt} = 1366$ K (1093°C)
+        \item Higher concentration allows operation at higher temperatures
     \end{itemize}
-    \item Explain why there's an optimum (competing effects of the two efficiency terms)
+    
+    \item \textbf{Maximum Efficiency Increases with Concentration:}
+    \begin{itemize}
+        \item $C = 100$ suns: $\eta_{max} = 49.4\%$
+        \item $C = 3000$ suns: $\eta_{max} = 72.9\%$
+        \item Improvement of 23.5 percentage points
+    \end{itemize}
+    
+    \item \textbf{Physical Trade-offs:}
+    \begin{itemize}
+        \item \textbf{Carnot efficiency} increases with $T_H$ (better thermodynamic limit)
+        \item \textbf{Receiver efficiency} decreases with $T_H$ (radiation losses $\propto T_H^4$)
+        \item Optimum occurs where product is maximized
+    \end{itemize}
+    
+    \item \textbf{Concentration Effects:}
+    \begin{itemize}
+        \item Higher $C$ shifts optimum to higher temperatures
+        \item Concentrated sunlight ($C \cdot I$) can overcome larger radiation losses ($\sigma T_H^4$)
+        \item Engineering trade-off: system complexity vs. performance
+    \end{itemize}
 \end{enumerate}
 
-\textbf{Physical Insight}
+\textbf{Physical Interpretation}
 
-The total efficiency is a product of two competing terms:
+The total efficiency is the product of two competing effects:
+\begin{align*}
+    \eta_{total}(T_H) = \underbrace{\left(1 - \frac{\sigma T_H^4}{C \cdot I}\right)}_{\text{decreases with } T_H} \times \underbrace{\left(1 - \frac{T_L}{T_H}\right)}_{\text{increases with } T_H}
+\end{align*}
+
+At the optimum: $\frac{d\eta_{total}}{dT_H} = 0$, which yields the balance between thermodynamic benefits and radiation losses.
+
+\textbf{Python Command Used:}
 \begin{itemize}
-    \item Receiver efficiency decreases with $T_H$ (radiation losses scale as $T^4$)
-    \item Carnot efficiency increases with $T_H$ (better thermodynamic limit)
+    \item \texttt{python carnot\_simple.py} $\rightarrow$ Complete analysis with optimization
 \end{itemize}
-The optimum occurs where the product is maximized. Higher concentration $C$ allows higher optimal $T_H$ because concentrated sunlight offsets radiation losses.
 
 
 
