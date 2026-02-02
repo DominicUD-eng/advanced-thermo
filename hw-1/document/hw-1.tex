@@ -53,34 +53,34 @@
     {\Large Homework Assignment \#1\\[2cm]}
     
     % Problem summary box
-    \begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,width=0.8\textwidth]
-        \centering
-        \textbf{Assignment Overview}\\[0.5cm]
-        Problems 1-14: Fundamental thermodynamic concepts, energy balances, entropy analysis, steam turbines, Carnot cycles, and concentrated solar power optimization
-    \end{tcolorbox}
+    % \begin{tcolorbox}[colback=blue!5!white,colframe=blue!75!black,width=0.8\textwidth]
+    %     \centering
+    %     \textbf{Assignment Overview}\\[0.5cm]
+    %     Problems 1-14: Fundamental thermodynamic concepts, energy balances, entropy analysis, steam turbines, Carnot cycles, and concentrated solar power optimization
+    % \end{tcolorbox}
     
-    \vspace{2cm}
+    % \vspace{2cm}
     
     % Student information
-    {\large \textbf{Student:} Dominic \\[1cm]}
+    {\large \textbf{Student:} Dominic LaVigne \\[1cm]}
     
     % Course information (if applicable)
     % {\large \textbf{Course:} ME XXX - Advanced Thermodynamics \\[0.5cm]}
     % {\large \textbf{Instructor:} Prof. [Name] \\[1cm]}
     
-    {\large \textbf{Submitted:} February 1, 2026 \\[2cm]}
+    {\large \textbf{Submitted:} February 2, 2026 \\[2cm]}
     
     % Computational tools box
-    \begin{tcolorbox}[colback=green!5!white,colframe=green!75!black,width=0.8\textwidth]
-        \centering
-        \textbf{Computational Tools Developed}\\[0.5cm]
-        • CoolProp CLI for multi-fluid property lookup\\
-        • Property solver for iterative thermodynamic calculations\\
-        • Carnot cycle optimization analysis\\
-        • Steam turbine performance analysis
-    \end{tcolorbox}
+    % \begin{tcolorbox}[colback=green!5!white,colframe=green!75!black,width=0.8\textwidth]
+    %     \centering
+    %     \textbf{Computational Tools Developed}\\[0.5cm]
+    %     • CoolProp CLI for multi-fluid property lookup\\
+    %     • Property solver for iterative thermodynamic calculations\\
+    %     • Carnot cycle optimization analysis\\
+    %     • Steam turbine performance analysis
+    % \end{tcolorbox}
     
-    \vspace{\fill}
+    % \vspace{\fill}
 \end{titlepage}
 
 \newpage
@@ -133,8 +133,8 @@ It is assumed the system is a simple compressible system, therefore there are tw
 
 \newpage
 
-\section{Problem 6: Hydro Storage System Energy Analysis}
-\addcontentsline{toc}{section}{Problem 6: Hydro Storage System}
+\section*{Problem 6: Hydro Storage System Energy Analysis}
+\addcontentsline{toc}{section}{Problem 6: Hydro Storage System Energy Analysis}
 
 \textbf{Given:}
 \begin{itemize}
@@ -165,7 +165,7 @@ It is assumed the system is a simple compressible system, therefore there are tw
             \dot{W}_{\text{turbine}} &= \dot{m} \cdot w_{\text{turbine}} \\
             \dot{m} &= \rho Q = 1000\ \mathrm{kg/m^3} \times 500\ \mathrm{m^3/s} = 500{,}000\ \mathrm{kg/s} \\
             w_{\text{turbine}} &= 9.81\ \mathrm{m/s^2} \times 85\ \mathrm{m} = 833.85\ \mathrm{J/kg} \\
-            \dot{W}_{\text{turbine}} &= 500{,}000\ \mathrm{kg/s} \times 833.85\ \mathrm{J/kg} = 416,925,000\ \mathrm{W} = 416.9\ \mathrm{MW}
+            \dot{W}_{\text{turbine}} &= 500{,}000\ \mathrm{kg/s} \times 833.85\ \mathrm{J/kg} = 416,925,000\ \mathrm{W} = \boxed{416.9\ \mathrm{MW}}
         \end{align*}
     \end{itemize}
 
@@ -176,11 +176,11 @@ It is assumed the system is a simple compressible system, therefore there are tw
             w_{\text{turbine}} &= \frac{V_1^2}{2} + g(z_1 - z_2) \\
             &= \frac{(3.75\ \mathrm{m/s})^2}{2} + 9.81\ \mathrm{m/s^2} \times 85\ \mathrm{m} \\
             &= 7.03\ \mathrm{J/kg} + 833.85\ \mathrm{J/kg} = 840.88\ \mathrm{J/kg} \\
-            \dot{W}_{\text{turbine}} &= 500{,}000\ \mathrm{kg/s} \times 840.88\ \mathrm{J/kg} = 420,440,000\ \mathrm{W} = 420.4\ \mathrm{MW}
+            \dot{W}_{\text{turbine}} &= 500{,}000\ \mathrm{kg/s} \times 840.88\ \mathrm{J/kg} = 420,440,000\ \mathrm{W} = \boxed{420.4\ \mathrm{MW}}
         \end{align*}
         \item \textbf{Percent increase in power:}
         \begin{align*}
-            \%\ \text{increase} &= \frac{420.4 - 416.9}{416.9} \times 100\% = 0.84\% 
+            \%\ \text{increase} &= \frac{420.4 - 416.9}{416.9} \times 100\% = \boxed{0.84\%} 
         \end{align*}
         \item \textbf{Physical explanation:}\\
         The increase in possible power output is due to the additional kinetic energy of the water entering the turbine when the upper reservoir is a river. This kinetic energy is converted to useful work by the turbine, resulting in a slightly higher power output compared to the case where the upper reservoir is a still lake.
@@ -189,8 +189,8 @@ It is assumed the system is a simple compressible system, therefore there are tw
 
 
 
-\section{Problem 7: Piston-Cylinder Energy Balance}
-\addcontentsline{toc}{section}{Problem 7: Piston-Cylinder System}
+\section*{Problem 7: Piston-Cylinder Energy Balance}
+\addcontentsline{toc}{section}{Problem 7: Piston-Cylinder Energy Balance}
 
 \textbf{Given:}
 \begin{itemize}
@@ -208,18 +208,18 @@ Using the ideal gas law to find the initial volume:
     PV &= mRT \\
     V_1 &= \frac{mRT_1}{P} \\
     &= \frac{(3.8\ \mathrm{kg})(4.124\ \mathrm{kJ/kg\cdot K})(900\ \mathrm{K})}{250\ \mathrm{kPa}} \\
-    &= 56.416\ \mathrm{m}^3
+    &= \boxed{56.416\ \mathrm{m}^3}
 \end{align*}
 
 For a constant pressure process, $\frac{T_1}{V_1} = \frac{T_2}{V_2}$:
 \begin{align*}
     \frac{900}{56.416} &= \frac{400}{V_2} \\
-    V_2 &= \frac{400 \times 56.416}{900} = 25.073\ \mathrm{m}^3
+    V_2 &= \frac{400 \times 56.416}{900} = \boxed{25.073\ \mathrm{m}^3}
 \end{align*}
 
 The change in volume is:
 \begin{align*}
-    \Delta V &= V_2 - V_1 = 25.073 - 56.416 = -31.343\ \mathrm{m}^3
+    \Delta V &= V_2 - V_1 = 25.073 - 56.416 = \boxed{-31.343\ \mathrm{m}^3}
 \end{align*}
 
 The negative sign indicates the volume decreased as the gas cooled.
@@ -231,7 +231,7 @@ For a constant pressure process, the boundary work is:
     W &= P\Delta V = P(V_2 - V_1) \\
     &= 250\ \mathrm{kPa} \times (25.073 - 56.416)\ \mathrm{m}^3 \\
     &= 250\ \mathrm{kPa} \times (-31.343\ \mathrm{m}^3) \\
-    &= -7,836\ \mathrm{kJ}
+    &= \boxed{-7,836\ \mathrm{kJ}}
 \end{align*}
 
 The negative sign indicates work is done \textbf{by} the system (the gas does work on the surroundings as it contracts). If you define work done \textbf{on} the system, $W = +7,836\ \mathrm{kJ}$ into the system. This makes sense because as heat is removed at constant pressure, the gas contracts and the surroundings do work on the gas.
@@ -248,7 +248,7 @@ The negative sign indicates work is done \textbf{by} the system (the gas does wo
     \begin{align*}
         \bar{C_p} &\approx \frac{14.35 + 14.93}{2} = 14.64\ \mathrm{kJ/kg\cdot K} \\
         \Delta h &= 14.64\ \mathrm{kJ/kg\cdot K} \times (400 - 900)\ \mathrm{K} \\
-        &= 14.64 \times (-500) = -7,320\ \mathrm{kJ/kg}
+        &= 14.64 \times (-500) = \boxed{-7,320\ \mathrm{kJ/kg}}
     \end{align*}
     \item \textbf{Change in specific internal energy ($\Delta u$):}
     \begin{align*}
@@ -259,7 +259,7 @@ The negative sign indicates work is done \textbf{by} the system (the gas does wo
     \begin{align*}
         \bar{C_v} &\approx \frac{10.2 + 10.9}{2} = 10.55\ \mathrm{kJ/kg\cdot K} \\
         \Delta u &= 10.55\ \mathrm{kJ/kg\cdot K} \times (400 - 900)\ \mathrm{K} \\
-        &= 10.55 \times (-500) = -5,275\ \mathrm{kJ/kg}
+        &= 10.55 \times (-500) = \boxed{-5,275\ \mathrm{kJ/kg}}
     \end{align*}
     \item Both $\Delta h$ and $\Delta u$ are negative, indicating the gas lost enthalpy and internal energy as it cooled from 900 K to 400 K.
 \end{itemize}
@@ -318,7 +318,7 @@ With the assumptions that $\Delta KE = 0$ (from Part A), $\Delta PE \approx 0$ (
 Solving for the heat loss:
 \begin{align*}
     \dot{Q}_{\text{loss}} &= \dot{W}_s - \dot{m} \cdot C \cdot \Delta T \\
-    &= 10 - 5.25 = 4.75\ \mathrm{kW}
+    &= 10 - 5.25 = \boxed{4.75\ \mathrm{kW}}
 \end{align*}
 
 Therefore, the heat loss from the pump is approximately $4.75\ \mathrm{kW}$.
@@ -370,7 +370,7 @@ The power output is:
     \dot{W}_{\text{out}} &= \dot{m}_1 h_1 - \dot{m}_2 h_2 - \dot{m}_3 h_3 \\
     &= (3.0)(2803.2) - (0.36)(2478.2) - (2.64)(2682.4) \\
     &= 8409.6 - 892.2 - 7081.5 \\
-    &= 435.9\ \mathrm{kW}
+    &= \boxed{435.9\ \mathrm{kW}}
 \end{align*}
 
 
@@ -436,11 +436,11 @@ To calculate and compare the turbine work output, we first find the isentropic w
 
 The corresponding power outputs are:
 \begin{align*}
-    \dot{W}_s &= \dot{m} w_s = 2.5 \times 719.1 = 1797.8 \text{ kW} \\
-    \dot{W}_{actual} &= \dot{m} w_{actual} = 2.5 \times 611.2 = 1528.0 \text{ kW}
+    \dot{W}_s &= \dot{m} w_s = 2.5 \times 719.1 = \boxed{1797.8 \text{ kW}} \\
+    \dot{W}_{actual} &= \dot{m} w_{actual} = 2.5 \times 611.2 = \boxed{1528.0 \text{ kW}}
 \end{align*}
 
-The difference is $\Delta \dot{W} = \dot{W}_s - \dot{W}_{actual} = 1797.8 - 1528.0 = 269.8$ kW. This verifies the calculation since $w_{actual} = \eta_s \times w_s = 0.85 \times 719.1 = 611.2$ kJ/kg.
+The difference is $\Delta \dot{W} = \dot{W}_s - \dot{W}_{actual} = 1797.8 - 1528.0 = \boxed{269.8 \text{ kW}}$. This verifies the calculation since $w_{actual} = \eta_s \times w_s = 0.85 \times 719.1 = 611.2$ kJ/kg.
 
 The real turbine produces 15\% less work due to irreversibilities (friction, turbulence, heat transfer within fluid), with the energy lost to entropy generation.
 
@@ -466,7 +466,7 @@ The real turbine produces 15\% less work due to irreversibilities (friction, tur
     \item \textbf{Calculation:}
     \begin{align*}
         \dot{S}_{gen} &= \dot{m}(s_2 - s_1) = 2.5 \times (7.213 - 6.923) \\
-        &= 2.5 \times 0.290 = 0.725 \text{ kW/K}
+        &= 2.5 \times 0.290 = \boxed{0.725 \text{ kW/K}}
     \end{align*}
     \item \textbf{Check:} $\dot{S}_{gen} = 0.725 > 0$ (confirms 2nd law for real process)
 \end{itemize}
@@ -528,7 +528,7 @@ From saturated steam properties at $P = 200$ kPa: $s_f = 1.530$ kJ/kg$\cdot$K, $
 The initial specific entropy is:
 \begin{align*}
     s_1 &= s_f + x_1 \cdot s_{fg} = 1.530 + (0.60)(5.597) \\
-    &= 1.530 + 3.358 = 4.888\ \mathrm{kJ/kg \cdot K}
+    &= 1.530 + 3.358 = \boxed{4.888\ \mathrm{kJ/kg \cdot K}}
 \end{align*}
 
 The final specific entropy is $s_2 = s_g = 7.127\ \mathrm{kJ/kg \cdot K}$ for saturated vapor.
@@ -588,21 +588,21 @@ The initial state properties at 150 kPa saturated liquid are: $h_1 = h_f = 467.1
 
 The mass of water is:
 \begin{align*}
-    m = \frac{V_1}{v_1} = \frac{0.0048\ \text{m}^3}{0.001053\ \text{m}^3/\text{kg}} = 4.558\ \text{kg}
+    m = \frac{V_1}{v_1} = \frac{0.0048\ \text{m}^3}{0.001053\ \text{m}^3/\text{kg}} = \boxed{4.558\ \text{kg}}
 \end{align*}
 
 Applying the energy balance for constant pressure:
 \begin{align*}
     Q_{in} &= m(h_2 - h_1) \\
     h_2 &= h_1 + \frac{Q_{in}}{m} = 467.1 + \frac{1700}{4.558} \\
-    &= 467.1 + 373.0 = 840.1\ \text{kJ/kg}
+    &= 467.1 + 373.0 = \boxed{840.1\ \text{kJ/kg}}
 \end{align*}
 
 Since $h_1 = 467.1 < h_2 = 840.1 < h_g = 2693.1$ kJ/kg (saturated vapor enthalpy), the final state is a two-phase mixture with quality $x_2 = 0.168$ (16.8\% vapor) and final entropy $s_2 = 2.404$ kJ/kg$\cdot$K.
 
 The entropy changes are:
 \begin{align*}
-    \Delta s &= s_2 - s_1 = 2.404 - 1.434 = 0.970\ \text{kJ/kg$\cdot$K} \\
+    \Delta s &= s_2 - s_1 = 2.404 - 1.434 = \boxed{0.970\ \text{kJ/kg$\cdot$K}} \\
     \Delta S &= m \times \Delta s = 4.558 \times 0.970 = \boxed{4.42\ \text{kJ/K}}
 \end{align*}
 
@@ -691,20 +691,20 @@ Using CoolProp for enthalpy property lookup:
     \dot{W}_{turb} &= \dot{m} \times w_t = 0.75 \times 952.7 = \boxed{714.5\ \mathrm{kW}}
 \end{align*}
 
-\textbf{Solution Summary}
-\begin{enumerate}
-    \item \textbf{Ceramic Particles:} $\Delta s_{1\rightarrow2} = 1.254$ kJ/kg$\cdot$K (heating from 250$^\circ$C to 1100$^\circ$C)
-    \item \textbf{Air Entropy Change:} $\Delta s_{3\rightarrow4} = 1.079$ kJ/kg$\cdot$K (constant pressure heating)
-    \item \textbf{Air Entropy at State 4:} $s_4 = 4.469$ kJ/kg$\cdot$K 
-    \item \textbf{Turbine Work:} $\dot{W}_{turb} = 714.5$ kW (isentropic expansion from 4000 kPa to 100 kPa)
-\end{enumerate}
+% \textbf{Solution Summary}
+% \begin{enumerate}
+%     \item \textbf{Ceramic Particles:} $\Delta s_{1\rightarrow2} = 1.254$ kJ/kg$\cdot$K (heating from 250$^\circ$C to 1100$^\circ$C)
+%     \item \textbf{Air Entropy Change:} $\Delta s_{3\rightarrow4} = 1.079$ kJ/kg$\cdot$K (constant pressure heating)
+%     \item \textbf{Air Entropy at State 4:} $s_4 = 4.469$ kJ/kg$\cdot$K 
+%     \item \textbf{Turbine Work:} $\dot{W}_{turb} = 714.5$ kW (isentropic expansion from 4000 kPa to 100 kPa)
+% \end{enumerate}
 
-\textbf{Key Tools Used:}
-\begin{itemize}
-    \item \textbf{CoolProp} For accurate air property calculations instead of Table A-17 approximations
-    \item \textbf{Property Solver:} Iterative tool to find $T_5$ where $s_5 = s_4$ for isentropic expansion
-    \item \textbf{Incompressible Substance Formula:} $\Delta s = C \ln(T_2/T_1)$ for ceramic particles
-\end{itemize}
+% \textbf{Key Tools Used:}
+% \begin{itemize}
+%     \item \textbf{CoolProp} For accurate air property calculations instead of Table A-17 approximations
+%     \item \textbf{Property Solver:} Iterative tool to find $T_5$ where $s_5 = s_4$ for isentropic expansion
+%     \item \textbf{Incompressible Substance Formula:} $\Delta s = C \ln(T_2/T_1)$ for ceramic particles
+% \end{itemize}
 
 
 
@@ -727,7 +727,6 @@ Using CoolProp for enthalpy property lookup:
         \item Cold reservoir: $T_L = 300\ \mathrm{K}$ (ambient temperature)
         \item Hot reservoir: $T_H$ varies (300 K to 2600 K)
     \end{itemize}
-    \item \textbf{Analysis Scope:} Combined receiver-engine efficiency optimization
 \end{itemize}
 
 \textbf{Assumptions:}
@@ -833,120 +832,114 @@ $T_H$ [K] & $C=100$ & $C=500$ & $C=1000$ & $C=2000$ & $C=3000$ \\
         \item Improvement of 23.5 percentage points
     \end{itemize}
     
-    \item \textbf{Physical Trade-offs:}
-    \begin{itemize}
-        \item Carnot efficiency increases with $T_H$: $\eta_{Carnot} = 1 - T_L/T_H$
-        \item Receiver efficiency decreases with $T_H$: $\eta_{receiver} = 1 - \sigma T_H^4/(C \cdot I)$
-        \item Optimal point balances these competing effects
-        \item Higher concentration shifts optimum to higher temperatures and efficiencies
-    \end{itemize}
+    \item \textbf{Physical Trade-offs:} Carnot efficiency increases with hot reservoir temperature, while receiver efficiency decreases due to radiative losses scaling as $T_H^4$. The optimal operating point balances these competing effects, and higher concentration ratios shift this optimum to higher temperatures and system efficiencies.
 \end{enumerate}
 
 \newpage
-\textbf{Python Code Implementation}
+% \textbf{Python Code Implementation}
 
-The analysis was performed using custom Python scripts for accurate calculations:
+% The analysis was performed using custom Python scripts for accurate calculations:
 
-\begin{verbatim}
-#!/usr/bin/env python3
-"""
-Problem 14: Carnot Cycle Heat Engines - Analysis
-"""
+% \begin{verbatim}
+% #!/usr/bin/env python3
+% """
+% Problem 14: Carnot Cycle Heat Engines - Analysis
+% """
 
-import math
-import numpy as np
-import matplotlib.pyplot as plt
+% import math
+% import numpy as np
+% import matplotlib.pyplot as plt
 
-# Physical constants
-SIGMA = 5.67e-8  # Stefan-Boltzmann constant [W/(m^2\cdot K^4)]
-I = 1000  # Solar irradiance [W/m^2]
-T_L = 300  # Cold reservoir temperature [K]
+% # Physical constants
+% SIGMA = 5.67e-8  # Stefan-Boltzmann constant [W/(m^2\cdot K^4)]
+% I = 1000  # Solar irradiance [W/m^2]
+% T_L = 300  # Cold reservoir temperature [K]
 
-# Concentration ratios [suns]
-concentration_ratios = [100, 500, 1000, 2000, 3000]
+% # Concentration ratios [suns]
+% concentration_ratios = [100, 500, 1000, 2000, 3000]
 
-def receiver_efficiency(T_H, C):
-    """Calculate receiver efficiency: eta_receiver = 1 - sigma*T_H^4/(C*I)"""
-    return 1 - (SIGMA * T_H**4) / (C * I)
+% def receiver_efficiency(T_H, C):
+%     """Calculate receiver efficiency: eta_receiver = 1 - sigma*T_H^4/(C*I)"""
+%     return 1 - (SIGMA * T_H**4) / (C * I)
 
-def carnot_efficiency(T_H, T_L):
-    """Calculate Carnot heat engine efficiency: eta_Carnot = 1 - T_L/T_H"""
-    return 1 - T_L / T_H
+% def carnot_efficiency(T_H, T_L):
+%     """Calculate Carnot heat engine efficiency: eta_Carnot = 1 - T_L/T_H"""
+%     return 1 - T_L / T_H
 
-def total_efficiency(T_H, C, T_L):
-    """Calculate total system efficiency: eta_total = eta_receiver x eta_Carnot"""
-    eta_recv = receiver_efficiency(T_H, C)
-    eta_carnot = carnot_efficiency(T_H, T_L)
-    if eta_recv <= 0:  # Invalid operating regime
-        return 0
-    return eta_recv * eta_carnot
+% def total_efficiency(T_H, C, T_L):
+%     """Calculate total system efficiency: eta_total = eta_receiver x eta_Carnot"""
+%     eta_recv = receiver_efficiency(T_H, C)
+%     eta_carnot = carnot_efficiency(T_H, T_L)
+%     if eta_recv <= 0:  # Invalid operating regime
+%         return 0
+%     return eta_recv * eta_carnot
 
-def find_optimal_temperature(C, T_L):
-    """Find optimal temperature by scanning the valid range"""
-    T_range = np.arange(T_L + 50, 2601, 1)  # 350K to 2600K
+% def find_optimal_temperature(C, T_L):
+%     """Find optimal temperature by scanning the valid range"""
+%     T_range = np.arange(T_L + 50, 2601, 1)  # 350K to 2600K
     
-    max_efficiency = -1
-    optimal_T_H = T_L + 50
+%     max_efficiency = -1
+%     optimal_T_H = T_L + 50
     
-    for T_H in T_range:
-        eta = total_efficiency(T_H, C, T_L)
-        if eta > max_efficiency:
-            max_efficiency = eta
-            optimal_T_H = T_H
+%     for T_H in T_range:
+%         eta = total_efficiency(T_H, C, T_L)
+%         if eta > max_efficiency:
+%             max_efficiency = eta
+%             optimal_T_H = T_H
     
-    return float(optimal_T_H), max_efficiency
+%     return float(optimal_T_H), max_efficiency
 
-# Find optimal conditions for each concentration ratio
-for C in concentration_ratios:
-    T_opt, eta_opt = find_optimal_temperature(C, T_L)
-    print(f"C = {C:4d} suns: T_opt = {T_opt:6.1f} K, "
-          f"eta_max = {eta_opt:5.1%}")
-\end{verbatim}
+% # Find optimal conditions for each concentration ratio
+% for C in concentration_ratios:
+%     T_opt, eta_opt = find_optimal_temperature(C, T_L)
+%     print(f"C = {C:4d} suns: T_opt = {T_opt:6.1f} K, "
+%           f"eta_max = {eta_opt:5.1%}")
+% \end{verbatim}
 
-\textbf{Command Line Execution:}
-\begin{verbatim}
-$ python carnot_simple.py      # Analysis and optimization
-$ python carnot_plotter.py     # Generate efficiency plots
-\end{verbatim}
+% \textbf{Command Line Execution:}
+% \begin{verbatim}
+% $ python carnot_simple.py      # Analysis and optimization
+% $ python carnot_plotter.py     # Generate efficiency plots
+% \end{verbatim}
 
-\textbf{Key Insights from Analysis:}
+% \textbf{Key Insights from Analysis:}
 
-\begin{enumerate}
-    \item \textbf{Physical Trade-offs:}
-    \begin{itemize}
-        \item \textbf{Carnot efficiency} increases with $T_H$ (better thermodynamic limit)
-        \item \textbf{Receiver efficiency} decreases with $T_H$ (radiation losses $\propto T_H^4$)
-        \item Optimum occurs where product is maximized
-    \end{itemize}
+% \begin{enumerate}
+%     \item \textbf{Physical Trade-offs:}
+%     \begin{itemize}
+%         \item \textbf{Carnot efficiency} increases with $T_H$ (better thermodynamic limit)
+%         \item \textbf{Receiver efficiency} decreases with $T_H$ (radiation losses $\propto T_H^4$)
+%         \item Optimum occurs where product is maximized
+%     \end{itemize}
     
-    \item \textbf{Concentration Effects:}
-    \begin{itemize}
-        \item Higher $C$ shifts optimum to higher temperatures
-        \item Concentrated sunlight ($C \cdot I$) can overcome larger radiation losses ($\sigma T_H^4$)
-        \item Engineering trade-off: system complexity vs. performance
-    \end{itemize}
-\end{enumerate}
+%     \item \textbf{Concentration Effects:}
+%     \begin{itemize}
+%         \item Higher $C$ shifts optimum to higher temperatures
+%         \item Concentrated sunlight ($C \cdot I$) can overcome larger radiation losses ($\sigma T_H^4$)
+%         \item Engineering trade-off: system complexity vs. performance
+%     \end{itemize}
+% \end{enumerate}
 
-\textbf{Physical Interpretation}
+% \textbf{Physical Interpretation}
 
-The total efficiency is the product of two competing effects:
-\begin{align*}
-    \eta_{total}(T_H) = \underbrace{\left(1 - \frac{\sigma T_H^4}{C \cdot I}\right)}_{\text{decreases with } T_H} \times \underbrace{\left(1 - \frac{T_L}{T_H}\right)}_{\text{increases with } T_H}
-\end{align*}
+% The total efficiency is the product of two competing effects:
+% \begin{align*}
+%     \eta_{total}(T_H) = \underbrace{\left(1 - \frac{\sigma T_H^4}{C \cdot I}\right)}_{\text{decreases with } T_H} \times \underbrace{\left(1 - \frac{T_L}{T_H}\right)}_{\text{increases with } T_H}
+% \end{align*}
 
-At the optimum: $\frac{d\eta_{total}}{dT_H} = 0$, which yields the balance between thermodynamic benefits and radiation losses.
+% At the optimum: $\frac{d\eta_{total}}{dT_H} = 0$, which yields the balance between thermodynamic benefits and radiation losses.
 
-\textbf{Python Command Used:}
-\begin{itemize}
-    \item \texttt{python carnot\_simple.py} $\rightarrow$ Complete analysis with optimization
-\end{itemize}
+% \textbf{Python Command Used:}
+% \begin{itemize}
+%     \item \texttt{python carnot\_simple.py} $\rightarrow$ Complete analysis with optimization
+% \end{itemize}
 
 
 
 
 % ========== APPENDIX ========== 
-\appendix
-\section{Appendix}
+% \appendix
+% \section{Appendix}
 % Add any supplementary material, extra figures, or code listings here.
 
 % ========== IMAGE, TABLE, AND CODE EXAMPLES ========== 

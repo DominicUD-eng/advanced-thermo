@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 """
-Problem 14: Carnot Cycle Heat Engines - Pure Python Analysis
-
-Calculates the total efficiency of concentrated solar power plants
-using only built-in Python functions (no external dependencies).
+Problem 14: Carnot Cycle Heat Engines
 """
 
 import math
