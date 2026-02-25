@@ -1,9 +1,10 @@
 \documentclass[12pt]{article}
 
-% ========== PACKAGES ========== 
+% ========== PACKAGES ==========
 % Math and equations
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{mathtools}
 
 % Graphics and images
 \usepackage{graphicx}
@@ -20,64 +21,630 @@
 \usepackage{fancyhdr}
 \usepackage{tcolorbox}
 \usepackage{xcolor}
-\usepackage{pdflscape}  % For landscape orientation
-\usepackage{xcolor}     % For colors
-\usepackage{colortbl}   % For colored table rows
+\usepackage{colortbl}
+\usepackage{pdflscape}
 
 % Other utilities
 \usepackage{hyperref}
 
-% ========== DOCUMENT SETUP ========== 
-% Margins (1 inch on all sides)
+% ========== DOCUMENT SETUP ==========
 \geometry{margin=1in}
 
-% Single spacing
-\singlespacing
-
-% Header and footer
-\pagestyle{fancy}
-\fancyhf{}
-\rhead{\thepage}
-
-% ========== COVER PAGE ========== 
 \begin{document}
 
-\begin{titlepage}
-    \centering
-    \vspace*{2cm}
-    
+\begin{center}
+    {\LARGE\textbf{Advanced Thermodynamics --- Homework 2}} \\[6pt]
+    {\large Dominic LaVigne} \\[4pt]
+    {\large February 2026}
+\end{center}
 
-    
-    {\LARGE\bfseries Advanced Thermodynamics\\[0.5cm]}
-    {\Large Homework Assignment \#2\\[2cm]}
-
-    {\large \textbf{Student:} Dominic LaVigne \\[1cm]}
-    
-
-    {\large \textbf{Submitted:} \today \\[2cm]}
-    
-\end{titlepage}
-
-\newpage
-\section{1.}
-
-\section{2.}
-\section{3.}
-\section{4.}
-\section{5.}
-\section{6.}
-\section{7.}
-\section{8.}
-\section{9.}
-% Table of contents
 \tableofcontents
 \newpage
 
+% ============================================================
+\section{Problem 1: Specific Heat Ratio}
+% ============================================================
 
+The specific heat ratio is defined as $k = C_p / C_v$. Based on what you know regarding the differences between the types of specific heats, do you anticipate it to be greater than, equal to, or less than one? Why?
 
+\subsection*{Solution}
 
-\vspace{0.5cm}
+I expect $k$ to be greater than one. $C_p$ accounts for both internal energy changes and boundary work as a result of volume changes. $C_v$ accounts for only changes to internal energy. Therefore $C_p > C_v$, and the ratio $k > 1$.
+
+\newpage
+% ============================================================
+\section{Problem 2: Isentropic Compressor/Turbine Relationships}
+% ============================================================
+
+Using the $T$--$ds$ equations and ideal-gas relationships and assuming constant specific heats, derive the predictive relationships for the performance of isentropic compressors/turbines for ideal gases. Additionally, comment on the weaknesses of this prediction and where you would differ.
+
+\textbf{Required relationships:}
+\begin{itemize}
+    \item $\dfrac{T_2}{T_1} = f(P_2, P_1, k)$
+    \item $\dfrac{T_2}{T_1} = f(v_2, v_1, k)$
+    \item $\dfrac{P_2}{P_1} = f(v_1, v_2, k)$
+\end{itemize}
+
+\subsection*{Solution}
+
+\subsubsection*{Derivation 1: Temperature--Volume Relationship}
+
+Start with the first $T$--$ds$ equation. For an isentropic process ($ds = 0$):
+\begin{align*}
+    0 &= C_v\,dT + P\,dv
+\end{align*}
+Substitute $P = RT/v$ (ideal gas):
+\begin{align*}
+    \frac{C_v\,dT}{T} + \frac{R\,dv}{v} &= 0
+\end{align*}
+Assume constant specific heats and integrate from state 1 to state 2:
+\begin{align*}
+    C_v \ln\!\left(\frac{T_2}{T_1}\right) + R \ln\!\left(\frac{v_2}{v_1}\right) &= 0
+\end{align*}
+Using $R = C_p - C_v$ and $k = C_p/C_v$, divide through by $C_v$:
+\begin{align*}
+    \ln\!\left(\frac{T_2}{T_1}\right) + (k-1)\ln\!\left(\frac{v_2}{v_1}\right) &= 0
+\end{align*}
+Therefore:
+\[
+    \boxed{\frac{T_2}{T_1} = \left(\frac{v_1}{v_2}\right)^{k-1}}
+\]
+
+\subsubsection*{Derivation 2: Temperature--Pressure Relationship}
+
+Start with the second $T$--$ds$ equation. For an isentropic process:
+\begin{align*}
+    0 &= C_p\,dT - v\,dP
+\end{align*}
+Substitute $v = RT/P$:
+\begin{align*}
+    \frac{R}{P}\,dP &= \frac{C_p\,dT}{T}
+\end{align*}
+Integrate:
+\begin{align*}
+    R \ln\!\left(\frac{P_2}{P_1}\right) &= C_p \ln\!\left(\frac{T_2}{T_1}\right)
+\end{align*}
+Since $R/C_p = (C_p - C_v)/C_p = 1 - 1/k = (k-1)/k$:
+\[
+    \boxed{\frac{T_2}{T_1} = \left(\frac{P_2}{P_1}\right)^{\frac{k-1}{k}}}
+\]
+
+\subsubsection*{Derivation 3: Pressure--Volume Relationship}
+
+Combine the two results:
+\begin{align*}
+    \left(\frac{P_2}{P_1}\right)^{\frac{k-1}{k}} = \left(\frac{v_1}{v_2}\right)^{k-1}
+\end{align*}
+Raise both sides to the power $k/(k-1)$:
+\[
+    \boxed{\frac{P_2}{P_1} = \left(\frac{v_1}{v_2}\right)^{k}}
+\]
+
+\subsection*{Commentary on Weaknesses}
+
+The assumptions needed are that specific heats are constant with respect to temperature and that the turbine/compressor is operating reversibly with an ideal gas. These assumptions are not realistic in any practical application. Turbines and compressors are almost never isentropic, and their purpose is compression/expansion indicating high-pressure regions, far from ideal-gas fluid regimes.
+
+\newpage
+% ============================================================
+\section{Problem 3: Insulated Box Equilibrium}
+% ============================================================
+
+An insulated box is initially divided into two halves by a frictionless, thermally conductive actuated wall. The piston is suddenly released and equilibrium between the two gases is fully attained.
+
+\subsection*{Initial Conditions}
+\begin{itemize}
+    \item \textbf{Left side (Air):} $V = 1.5\;\mathrm{m^3}$, $P = 4\;\text{bar}$, $T = 400\;\text{K}$
+    \item \textbf{Right side (Also Air):} $V = 1.5\;\mathrm{m^3}$, $P = 2\;\text{bar}$, $T = 400\;\text{K}$
+    \item Wall is suddenly removed
+\end{itemize}
+
+\subsection*{Part A: Final Temperature}
+
+The system is in free expansion (no work) and insulated (no heat), therefore internal energy is conserved and the temperature is constant:
+\[
+    T_f = 400\;\text{K}
+\]
+
+\subsection*{Part B: Final Pressure}
+\begin{align*}
+    n_L &= \frac{P_L V_L}{R T} = \frac{4 \times 1.5}{8.314 \times 400} = 0.0018042\;\text{mol} \\
+    n_R &= \frac{P_R V_R}{R T} = \frac{2 \times 1.5}{8.314 \times 400} = 0.0009028\;\text{mol}
+\end{align*}
+Total moles: $n_{\text{total}} = 0.0018042 + 0.0009028 = 0.002707\;\text{mol}$. Final volume: $V_f = 3\;\text{m}^3$.
+\begin{align*}
+    P_f &= \frac{n_{\text{total}}\, R\, T}{V_f} = \frac{8.314 \times 0.002707 \times 400}{3} = 3\;\text{bar}
+\end{align*}
+
+\subsection*{Part C: Energy Production}
+\[
+    \Delta U = Q - W = 0
+\]
+Therefore, the energy production is zero.
+
+\subsection*{Part D: Entropy Production}
+
+Since $T$ is constant, the first term of the entropy equation vanishes:
+\begin{align*}
+    \Delta S &= nR\ln\!\left(\frac{V_f}{V_i}\right)
+\end{align*}
+
+\textbf{For the left side (high pressure air):}
+\begin{align*}
+    \Delta S_L &= 0.0018042 \times 8.314 \times \ln\!\left(\frac{3}{1.5}\right) = 0.0104\;\text{kJ/K}
+\end{align*}
+
+\textbf{For the right side (low pressure air):}
+\begin{align*}
+    \Delta S_R &= 0.0009028 \times 8.314 \times \ln\!\left(\frac{3}{1.5}\right) = 0.0052\;\text{kJ/K}
+\end{align*}
+
+\textbf{Total entropy production:}
+\begin{align*}
+    \Delta S_{\text{total}} &= \Delta S_L + \Delta S_R = 0.0104 + 0.0052 = 0.0156\;\text{kJ/K}
+\end{align*}
+
+This entropy production arises from the irreversible mixing and pressure equalization of two gases at different pressures. The pressure difference could have been used to do work via a piston, but instead the gases spontaneously expanded, destroying that work potential.
+
+\newpage
+% ============================================================
+\section{Problem 4: Compressor and Heat Exchanger}
+% ============================================================
+
+Air flows through a compressor and heat exchanger. A separate liquid water stream also flows through the heat exchanger. The system operates at pseudo-steady state. Assume individual components are well insulated relative to the environment.
+
+\subsection*{Given Conditions}
+
+\textbf{Air Stream:}
+\begin{itemize}
+    \item Inlet: $P = 96\;\text{kPa}$, $T = 27\,^\circ\text{C}$, $\dot{Q} = 26.91\;\mathrm{m^3/min}$
+    \item Compressor outlet: $P = 230\;\text{kPa}$, $T = 127\,^\circ\text{C}$
+    \item Heat exchanger outlet: Isobaric, $T = 77\,^\circ\text{C}$
+\end{itemize}
+
+\textbf{Water Stream:}
+\begin{itemize}
+    \item Inlet: $P_{\text{atm}}$, $T = 25\,^\circ\text{C}$
+    \item Outlet: Isobaric, $T = 40\,^\circ\text{C}$
+\end{itemize}
+
+\subsection*{Part A: Compressor Power and Cooling Water Flow Rate}
+
+\textbf{Key formulas:}
+\begin{align*}
+    \dot{W}_{\text{comp}} &= \dot{m}_{\text{air}}(h_2 - h_1) \\
+    \dot{m}_{\text{water}} &= \frac{\dot{m}_{\text{air}}(h_2 - h_3)}{c_{p,\text{water}}(T_{w,\text{out}} - T_{w,\text{in}})}
+\end{align*}
+
+\textbf{Numerical values used:}
+\begin{itemize}
+    \item $h_1 = 426{,}309.837\;\text{J/kg}$
+    \item $h_2 = 527{,}107.689\;\text{J/kg}$
+    \item $h_3 = 476{,}472.292\;\text{J/kg}$
+    \item $\rho_{\text{inlet}} = 1.115122\;\text{kg/m}^3$, $\dot{Q} = 26.91\;\text{m}^3/\text{min}$ $\Rightarrow \dot{m}_{\text{air}} = 0.5\;\text{kg/s}$
+    \item $h_{w,i} = 104{,}920.12\;\text{J/kg}$, $h_{w,o} = 167{,}616.29\;\text{J/kg}$
+    \item $c_{p,\text{water}} = 4180\;\text{J/(kg\,K)}$
+\end{itemize}
+
+\textbf{Results:}
+\begin{align*}
+    \dot{m}_{\text{water}} &= 0.4403\;\text{kg/s} \\
+    \dot{W}_{\text{comp}} &= 50.4\;\text{kW}
+\end{align*}
+
+\subsection*{Part B: Entropy Production Rates}
+\begin{align*}
+    \dot{S}_{\text{gen,comp}} &= \dot{m}_{\text{air}}(s_2 - s_1) = 19.5535\;\text{W/K} \\
+    \dot{S}_{\text{gen,HX}} &= \dot{m}_{\text{air}}(s_3 - s_2) + \dot{m}_w(s_{w,o} - s_{w,i}) \approx 22.724\;\text{W/K}
+\end{align*}
+
+\subsection*{Part C: Sources of Irreversibility}
+\begin{itemize}
+    \item \textbf{Compressor irreversibilities:} friction, non-ideal compression, finite temperature differences.
+    \item \textbf{Heat exchanger irreversibilities:} finite temperature differences driving heat transfer.
+\end{itemize}
+
+\newpage
+% ============================================================
+\section{Problem 5: Turbine Between Two Tanks}
+% ============================================================
+
+A turbine is located between two tanks. Initially the smaller tank is pressurized while the larger tank is fully evacuated. Assume the heat transfer with the surroundings is negligible. Steam is allowed to flow from the smaller tank, through the turbine, and into the larger tank until equilibrium is attained. If the turbine is ideal during its expansion process, determine:
+
+\subsection*{Initial Conditions}
+\begin{itemize}
+    \item \textbf{Small Tank ($100\;\text{m}^3$):} Steam at $3.0\;\text{MPa}$ and $280\,^\circ\text{C}$
+    \item \textbf{Large Tank ($1000\;\text{m}^3$):} Pure vacuum
+\end{itemize}
+
+\subsection*{Part A: Equilibrium Conditions}
+
+\textbf{Step 1: Initial Properties of Small Tank}
+\begin{align*}
+    T_1 &= 280^\circ\text{C} = 553.15\;\text{K} \\
+    P_1 &= 3.0\;\text{MPa} = 3{,}000{,}000\;\text{Pa} \\
+    V_{\text{small}} &= 100\;\text{m}^3 \\
+    \rho_1 &= 12.9598\;\text{kg/m}^3 \\
+    u_1 &= 2{,}710{,}698.33\;\text{J/kg} \\
+    v_1 &= \frac{1}{\rho_1} = 0.07716\;\text{m}^3\text{/kg}
+\end{align*}
+
+\textbf{Step 2: Initial Mass in Small Tank}
+\begin{align*}
+    m_1 &= \frac{V_{\text{small}}}{v_1} = \frac{100}{0.07716} = 1{,}296.0\;\text{kg}
+\end{align*}
+
+\textbf{Step 3: Conservation Principles}
+
+\textit{Conservation of Mass:}
+\begin{align*}
+    m_{\text{total}} &= m_1 = 1{,}296.0\;\text{kg}
+\end{align*}
+
+\textit{Conservation of Energy} (adiabatic system, rigid tanks):
+\begin{align*}
+    U_{\text{initial}} &= U_{\text{final}} \\
+    m_1 u_1 &= m_{\text{total}}\, u_f \\
+    u_f &= u_1 = 2{,}710{,}698.33\;\text{J/kg}
+\end{align*}
+
+\textbf{Step 4: Final Specific Volume}
+\begin{align*}
+    V_{\text{total}} &= 100 + 1{,}000 = 1{,}100\;\text{m}^3 \\
+    v_f &= \frac{V_{\text{total}}}{m_{\text{total}}} = \frac{1{,}100}{1{,}296.0} = 0.8488\;\text{m}^3\text{/kg} \\
+    \rho_f &= 1.1781\;\text{kg/m}^3
+\end{align*}
+
+From CoolProp at $\rho = 1.1781\;\text{kg/m}^3$ and $u = 2{,}710{,}698.33\;\text{J/kg}$:
+\begin{align*}
+    T_f &= 510.99\;\text{K} = 237.84\,^\circ\text{C} \\
+    P_f &= 274{,}926.80\;\text{Pa} = 0.2749\;\text{MPa} \\
+    m_{\text{small,final}} &= \frac{100}{0.8488} = 117.8\;\text{kg} \\
+    m_{\text{large,final}} &= \frac{1{,}000}{0.8488} = 1{,}178.2\;\text{kg}
+\end{align*}
+
+Check: $m_{\text{small,final}} + m_{\text{large,final}} = 117.8 + 1{,}178.2 = 1{,}296.0\;\text{kg}$ \checkmark
+
+\subsection*{Part B: Maximum Theoretical Work}
+
+\textbf{Step 1:} For an ideal turbine operating adiabatically and reversibly, the process is isentropic.
+
+\textbf{Step 2: Initial State Properties}
+\begin{align*}
+    u_1 &= 2{,}710{,}698.33\;\text{J/kg} \\
+    s_1 &= 6{,}448.57\;\text{J/(kg\,K)}
+\end{align*}
+
+\textbf{Step 3: Final State Properties (Isentropic Expansion)}
+
+From CoolProp at $s = 6{,}448.57\;\text{J/(kg\,K)}$ and $\rho = 1.1781\;\text{kg/m}^3$:
+\begin{align*}
+    T_2 &= 390.30\;\text{K} = 117.15\,^\circ\text{C} \\
+    P_2 &= 181{,}372.43\;\text{Pa} = 0.1814\;\text{MPa} \\
+    u_2 &= 2{,}270{,}315.48\;\text{J/kg}
+\end{align*}
+
+\textbf{Step 4: Maximum Work per Unit Mass}
+\begin{align*}
+    w_{\text{turbine}} &= u_1 - u_2 = 2{,}710{,}698.33 - 2{,}270{,}315.48 = 440{,}382.85\;\text{J/kg}
+\end{align*}
+
+\textbf{Step 5: Maximum Total Work Output}
+\begin{align*}
+    W_{\text{max}} &= m_{\text{flow}} \times w_{\text{turbine}} \\
+                   &= 1{,}296.0 \times 440{,}382.85 \\
+                   &= 570{,}736{,}254\;\text{J} \\
+    W_{\text{max}} &\approx \boxed{570.74\;\text{MJ}}
+\end{align*}
+
+\newpage
+% ============================================================
+\section{Problem 6: Desuperheating Process}
+% ============================================================
+
+Liquid water is injected into a superheated vapor to produce a saturated vapor.
+
+\subsection*{Given Conditions}
+\begin{itemize}
+    \item \textbf{Injected Water:} $P = 0.3\;\text{MPa}$, $\dot{m} = 6.37\;\text{kg/min}$
+    \item \textbf{Steam Inlet:} $P = 0.3\;\text{MPa}$, $T = 200\,^\circ\text{C}$
+    \item \textbf{Vapor Outlet:} $P = 0.3\;\text{MPa}$ (Saturated Vapor)
+\end{itemize}
+
+\subsection*{Part A: Mass Flow Rate of Superheated Vapor}
+\begin{align*}
+    \dot{m}_{\text{steam}} &= \frac{\dot{m}_{\text{water}} \times (h_{\text{sat,vapor}} - h_{\text{water}})}{h_{\text{steam}} - h_{\text{sat,vapor}}} \\
+    &= \frac{6.37 \times (2{,}724{,}882.63 - 561{,}426.68)}{2{,}865{,}890.65 - 2{,}724{,}882.63} \\
+    &= 97.7\;\text{kg/min}
+\end{align*}
+
+\subsection*{Part B: Rate of Entropy Production}
+\begin{align*}
+    \dot{S}_{\text{gen}} &= (\dot{m}_{\text{water}} + \dot{m}_{\text{steam}})\,s_{\text{sat,vapor}}
+        - \dot{m}_{\text{water}}\,s_{\text{water}}
+        - \dot{m}_{\text{steam}}\,s_{\text{steam}} \\
+    &= (6.37 + 97.7) \times 6991.62 \\
+    &\quad - 6.37 \times 1671.72 \\
+    &\quad - 97.7 \times 7313.13 \\
+    &= 2.48 \times 10^{3}\;\text{J/(min\,K)} \\
+    \dot{S}_{\text{gen}} &= 0.0413\;\text{kW/K}
+\end{align*}
+
+\newpage
+% ============================================================
+\section{Problem 7: Exergy Comparison}
+% ============================================================
+
+Which of the two materials below has the capability to produce the most work in a closed system if taken to an environmental dead state of $25\,^\circ\text{C}$ and $100\;\text{kPa}$?
+
+\subsection*{Initial States}
+\begin{itemize}
+    \item \textbf{Steam:} 1 kg, $P = 800\;\text{kPa}$, $T = 180\,^\circ\text{C}$
+    \item \textbf{R-134a:} 1 kg, $P = 800\;\text{kPa}$, $T = 180\,^\circ\text{C}$
+\end{itemize}
+
+\textbf{Dead State:} $T_0 = 25\,^\circ\text{C} = 298.15\;\text{K}$, $P_0 = 100\;\text{kPa}$
+
+\subsection*{Solution}
+
+\subsubsection*{Steam (Water)}
+
+Initial state ($P = 800\;\text{kPa}$, $T = 180\,^\circ\text{C} = 453.15\;\text{K}$):
+$$h_1 = 2792.44\;\text{kJ/kg}, \qquad s_1 = 6.7154\;\text{kJ/(kg\,K)}$$
+
+Dead state ($P_0 = 100\;\text{kPa}$, $T_0 = 25\,^\circ\text{C}$):
+$$h_0 = 104.92\;\text{kJ/kg}, \qquad s_0 = 0.3672\;\text{kJ/(kg\,K)}$$
+
+Specific exergy:
+\begin{align*}
+    \psi_{\text{steam}} &= (h_1 - h_0) - T_0(s_1 - s_0) \\
+    &= (2792.44 - 104.92) - 298.15(6.7154 - 0.3672) \\
+    &= 2687.52 - 1892.97 \\
+    &= 794.55\;\text{kJ/kg}
+\end{align*}
+
+\subsubsection*{R-134a}
+
+Initial state ($P = 800\;\text{kPa}$, $T = 180\,^\circ\text{C} = 453.15\;\text{K}$):
+$$h_1 = 570.78\;\text{kJ/kg}, \qquad s_1 = 2.1283\;\text{kJ/(kg\,K)}$$
+
+Dead state ($P_0 = 100\;\text{kPa}$, $T_0 = 25\,^\circ\text{C}$):
+$$h_0 = 424.55\;\text{kJ/kg}, \qquad s_0 = 1.9017\;\text{kJ/(kg\,K)}$$
+
+Specific exergy:
+\begin{align*}
+    \psi_{\text{R134a}} &= (h_1 - h_0) - T_0(s_1 - s_0) \\
+    &= (570.78 - 424.55) - 298.15(2.1283 - 1.9017) \\
+    &= 146.23 - 67.57 \\
+    &= 78.66\;\text{kJ/kg}
+\end{align*}
+
+\subsection*{Conclusion}
+
+\textbf{Steam has significantly higher exergy:}
+\begin{itemize}
+    \item Steam: $\psi = 794.55\;\text{kJ/kg}$
+    \item R-134a: $\psi = 78.66\;\text{kJ/kg}$
+\end{itemize}
+
+Steam (water) has the capability to produce approximately 10 times more work than R-134a when brought to the environmental dead state. This is because steam at these conditions has a much larger enthalpy difference from the dead state, despite both substances starting at the same pressure and temperature. This is largely due to water's large specific heat capacity.
+
+\newpage
+% ============================================================
+\section{Problem 8: Mixing Chamber}
+% ============================================================
+
+Liquid water is heated using a mixing chamber that combines it with superheated steam at a constant pressure. Heat loss to the environment is tracked.
+
+\subsection*{Given Conditions}
+\begin{itemize}
+    \item \textbf{Liquid Water Inlet:} $T = 15\,^\circ\text{C}$, $\dot{m}_1 = 4\;\text{kg/s}$
+    \item \textbf{Steam Inlet:} $T = 200\,^\circ\text{C}$, $P = 200\;\text{kPa}$
+    \item \textbf{Mixed Outlet:} $T = 80\,^\circ\text{C}$, $P = 200\;\text{kPa}$
+    \item \textbf{Heat Loss:} $\dot{Q} = 600\;\text{kJ/min}$
+\end{itemize}
+
+\subsection*{Part A: Mass Flow Rate of Superheated Steam}
+
+\begin{enumerate}
+    \item \textbf{Control volume and assumptions}
+    \begin{itemize}
+        \item Steady-state mixing chamber at constant pressure, $P = 200\;\text{kPa}$
+        \item Neglect KE/PE changes
+        \item One heat interaction (loss): $\dot{Q} = -600\;\text{kJ/min} = -10\;\text{kW}$
+    \end{itemize}
+
+    \item \textbf{Property states} (steam tables / IF97)
+    \begin{itemize}
+        \item Liquid inlet (compressed liquid $\approx$ saturated liquid at $15\,^\circ\text{C}$):
+            $h_1 \approx h_f(15\,^\circ\text{C})$,\;
+            $s_1 \approx s_f(15\,^\circ\text{C})$
+        \item Steam inlet (superheated at $200\,^\circ\text{C}$, $200\;\text{kPa}$):
+            $h_2$, $s_2$
+        \item Mixed outlet ($80\,^\circ\text{C}$, $200\;\text{kPa}$):
+            At $200\;\text{kPa}$, $T_{\text{sat}} \approx 120.2\,^\circ\text{C}$, so $T_3 < T_{\text{sat}}$ $\Rightarrow$ \textbf{compressed (subcooled) liquid}.
+            $h_3 \approx h_f(80\,^\circ\text{C})$,\;
+            $s_3 \approx s_f(80\,^\circ\text{C})$
+    \end{itemize}
+
+    \item \textbf{Mass balance}
+    \begin{align*}
+        \dot{m}_3 = \dot{m}_1 + \dot{m}_2
+    \end{align*}
+
+    \item \textbf{Steady-flow energy balance}
+    \begin{align*}
+        0 &= \dot{Q} + \dot{m}_1 h_1 + \dot{m}_2 h_2 - (\dot{m}_1 + \dot{m}_2) h_3
+    \end{align*}
+    Solve for $\dot{m}_2$:
+    \begin{align*}
+        \boxed{\dot{m}_2 = \frac{\dot{m}_1(h_3 - h_1) - \dot{Q}}{h_2 - h_3}}
+    \end{align*}
+
+    Numerical values:
+    \begin{itemize}
+        \item $h_1 = 63.171\;\text{kJ/kg}$
+        \item $h_2 = 2870.730\;\text{kJ/kg}$
+        \item $h_3 = 335.134\;\text{kJ/kg}$
+    \end{itemize}
+
+    Compute:
+    \begin{align*}
+        \dot{m}_1(h_3 - h_1) &= 4(335.134 - 63.171) = 1087.85\;\text{kW} \\
+        \dot{m}_1(h_3 - h_1) - \dot{Q} &= 1087.85 - (-10) = 1097.85\;\text{kW} \\
+        h_2 - h_3 &= 2870.730 - 335.134 = 2535.596\;\text{kJ/kg}
+    \end{align*}
+    Therefore:
+    \begin{align*}
+        \boxed{\dot{m}_2 = \frac{1097.85}{2535.596} = 0.433\;\text{kg/s}}
+    \end{align*}
+\end{enumerate}
+
+\subsection*{Part B: Rate of Lost Work Potential (Exergy Destruction)}
+
+The lost work potential rate is the exergy destruction rate:
+\begin{align*}
+    \dot{W}_{\text{lost}} = \dot{X}_{\text{dest}} = T_0\,\dot{S}_{\text{gen}}
+\end{align*}
+
+\begin{enumerate}
+    \item \textbf{Dead state:} $T_0 = 25\,^\circ\text{C} = 298.15\;\text{K}$, $p_0 = 100\;\text{kPa}$
+
+    \item \textbf{Entropy rate balance (steady CV):}
+    \begin{align*}
+        \dot{S}_{\text{gen}} = \dot{m}_3 s_3 - \dot{m}_1 s_1 - \dot{m}_2 s_2 - \frac{\dot{Q}}{T_b}
+    \end{align*}
+    with $\dot{m}_3 = \dot{m}_1 + \dot{m}_2$ and $\dot{Q} = -10\;\text{kW}$, $T_b \approx T_0 = 298.15\;\text{K}$.
+
+    \textbf{Numerical evaluation (CoolProp at $P = 200\;\text{kPa}$):}
+    \begin{itemize}
+        \item $s_1 = 0.224433\;\text{kJ/(kg\,K)}$
+        \item $s_2 = 7.508072\;\text{kJ/(kg\,K)}$
+        \item $s_3 = 1.075478\;\text{kJ/(kg\,K)}$
+    \end{itemize}
+
+    Mass flow rates: $\dot{m}_1 = 4.000$, $\dot{m}_2 = 0.433$, $\dot{m}_3 = 4.433\;\text{kg/s}$.
+
+    Compute:
+    \begin{align*}
+        \dot{m}_3 s_3 &= 4.433 \times 1.075478 = 4.767\;\text{kW/K} \\
+        \dot{m}_1 s_1 &= 4 \times 0.224433 = 0.898\;\text{kW/K} \\
+        \dot{m}_2 s_2 &= 0.433 \times 7.508072 = 3.251\;\text{kW/K} \\
+        -\frac{\dot{Q}}{T_b} &= -\frac{-10}{298.15} = 0.0335\;\text{kW/K}
+    \end{align*}
+
+    So:
+    \begin{align*}
+        \dot{S}_{\text{gen}} &= 4.767 - 0.898 - 3.251 + 0.0335 = 0.6515\;\text{kW/K}
+    \end{align*}
+
+    Finally:
+    \begin{align*}
+        \boxed{\dot{W}_{\text{lost}} = T_0\,\dot{S}_{\text{gen}} = 298.15 \times 0.6515 = 194\;\text{kW}}
+    \end{align*}
+\end{enumerate}
+
+\newpage
+% ============================================================
+\section{Problem 9: Heating Method Exergy Comparison}
+% ============================================================
+
+The temperature of the air in a building can be maintained at a desirable level during winter by using different methods of heating. Compare indirectly heating this air in a heat exchanger unit with condensing steam to heating the air directly via an electric resistance heater. Perform exergy analyses to determine which heating method results in the least exergy destruction.
+
+\subsection*{Assumptions}
+\begin{itemize}
+    \item Steady state. Air behaves as an ideal gas.
+    \item Indoor air maintained at $T_{\text{in}} = 25\,^\circ\text{C} = 298.15\;\text{K}$.
+    \item Dead state: $T_0 = 0\,^\circ\text{C} = 273.15\;\text{K}$, $p_0 = 1\;\text{atm}$ (typical winter design).
+    \item Same $\dot{Q}_{\text{load}}$ for both systems.
+    \item Electric resistance heater: $\eta_{\text{elec}\to\text{heat}} = 1$.
+    \item Steam condenses at constant $T_s$.
+    \item Neglect KE/PE. No auxiliary work or casing losses.
+    \item Point-of-use analysis only.
+\end{itemize}
+
+\subsection*{Key Equations}
+
+Exergy transfer with heat at boundary temperature $T_b$:
+\begin{align*}
+    \dot{X}_Q = \left(1 - \frac{T_0}{T_b}\right)\dot{Q}
+\end{align*}
+
+Exergy destruction rate:
+\begin{align*}
+    \dot{X}_{\text{dest}} = T_0\,\dot{S}_{\text{gen}}
+\end{align*}
+
+\subsection*{System 1: Steam Condensing HX (heat input at $T_s$)}
+
+\begin{align*}
+    \dot{X}_{\text{in,steam}} &= \left(1 - \frac{T_0}{T_s}\right)\dot{Q}_{\text{load}} \\
+    \dot{X}_{\text{out,room}} &= \left(1 - \frac{T_0}{T_{\text{in}}}\right)\dot{Q}_{\text{load}}
+\end{align*}
+
+Exergy destruction:
+\begin{align*}
+    \boxed{\dot{X}_{\text{dest,steam}} = \dot{Q}_{\text{load}}\, T_0 \left(\frac{1}{T_{\text{in}}} - \frac{1}{T_s}\right)}
+\end{align*}
+
+\subsection*{System 2: Electric Resistance Heater (work input)}
+
+\begin{align*}
+    \dot{W}_{\text{elec,in}} &= \dot{Q}_{\text{load}} \\
+    \dot{X}_{\text{in,elec}} &= \dot{Q}_{\text{load}}
+\end{align*}
+
+Exergy destruction:
+\begin{align*}
+    \boxed{\dot{X}_{\text{dest,elec}} = \dot{Q}_{\text{load}} - \left(1 - \frac{T_0}{T_{\text{in}}}\right)\dot{Q}_{\text{load}} = \dot{Q}_{\text{load}}\,\frac{T_0}{T_{\text{in}}}}
+\end{align*}
+
+\subsection*{Difference}
+\begin{align*}
+    \boxed{\Delta\dot{X}_{\text{dest}} = \dot{X}_{\text{dest,elec}} - \dot{X}_{\text{dest,steam}}}
+\end{align*}
+
+\subsection*{Energy (equal $\dot{Q}_{\text{load}}$)}
+\begin{align*}
+    \boxed{\dot{E}_{\text{in,elec}} = \dot{E}_{\text{in,steam}} = \dot{Q}_{\text{load}}}
+\end{align*}
+
+\subsection*{Numerical Comparison}
+
+\textbf{Typical Operating Parameters (from research):}
+\begin{itemize}
+    \item \textbf{Steam heating system:} Low-pressure steam condensing at approximately $T_s = 120\,^\circ\text{C} = 393.15\;\text{K}$ (common for building HVAC systems) \cite{toolbox}.
+    \item \textbf{Indoor air temperature:} $T_{\text{in}} = 25\,^\circ\text{C} = 298.15\;\text{K}$ (already assumed).
+    \item \textbf{Environment (dead state):} Winter ambient temperature $T_0 = 0\,^\circ\text{C} = 273.15\;\text{K}$ (typical winter design condition) \cite{ashrae}.
+\end{itemize}
+
+\textbf{System 1 --- Steam:}
+\begin{align*}
+    \frac{\dot{X}_{\text{dest,steam}}}{\dot{Q}_{\text{load}}} &= 273.15\left(\frac{1}{298.15} - \frac{1}{393.15}\right) = 273.15 \times 0.000810 = 0.221
+\end{align*}
+
+\textbf{System 2 --- Electric:}
+\begin{align*}
+    \frac{\dot{X}_{\text{dest,elec}}}{\dot{Q}_{\text{load}}} &= \frac{273.15}{298.15} = 0.916
+\end{align*}
+
+\textbf{Comparison:}
+\begin{align*}
+    \frac{\Delta\dot{X}_{\text{dest}}}{\dot{Q}_{\text{load}}} &= 0.916 - 0.221 = 0.695 \\
+    \frac{\dot{X}_{\text{dest,elec}}}{\dot{X}_{\text{dest,steam}}} &\approx 4.1
+\end{align*}
+
+\subsection*{Conclusion}
+
+The electric resistance heater destroys \textbf{69.5\%} of $\dot{Q}_{\text{load}}$ as exergy versus \textbf{22.1\%} for steam---roughly \textbf{4.1 times more}---independent of system scale. Electricity is pure work (exergy = energy), so converting it to low-temperature heat is inherently wasteful, while steam at $120\,^\circ\text{C}$ supplies heat much closer to the delivery temperature.
+
+\textbf{Result: Steam condensing heat exchanger heating results in the least exergy destruction.}
+
+\begin{thebibliography}{9}
+\bibitem{toolbox}
+Engineering ToolBox, ``Saturated Steam Properties (SI),'' \url{https://www.engineeringtoolbox.com/saturated-steam-properties-d_101.html}.
+
+\bibitem{ashrae}
+ASHRAE, ``Climatic Design Conditions,'' \url{https://ashrae-meteo.info/}.
+\end{thebibliography}
 
 \end{document}
-
-
