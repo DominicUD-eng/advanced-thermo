@@ -5,3 +5,15 @@
 *.out
 *.synctex.gz
 *.toc
+
+# Generated plots and images
+*.png
+*.jpg
+*.jpeg
+*.svg
+
+# Analysis / results data
+*.parquet
+*.db
+*.sqlite
+*.sqlite3

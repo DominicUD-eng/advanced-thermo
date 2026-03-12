@@ -1,0 +1,49 @@
+{
+  "n_samples": 100,
+  "seed": 42,
+  "fixed": {
+    "fluid": "CO2",
+    "expander_mode": "throttle",
+    "base_mode": "discharge"
+  },
+  "numeric_bounds": {
+    "mass_flow_rate": [0.1, 200.0],
+    "p_low": [8000000.0, 35000000.0],
+    "p_high": [9000000.0, 55000000.0],
+    "t_source": [450.0, 1400.0],
+    "t_sink": [250.0, 750.0],
+    "t0": [250.0, 350.0],
+    "p0": [80000.0, 250000.0],
+    "eta_a": [0.5, 1.0],
+    "eta_b": [0.5, 1.0],
+    "eps_recup": [0.2, 1.0],
+    "eps_hot": [0.2, 1.0],
+    "eps_cold": [0.2, 1.0]
+  },
+  "constraints": {
+    "min_delta_p_pa": 200000.0,
+    "min_delta_t_k": 5.0,
+    "avoid_vapor_dome": true,
+    "critical_pressure_pa": 7377000.0,
+    "critical_pressure_margin_pa": 100000.0,
+    "enforce_temperature_above_critical": false,
+    "critical_temperature_k": 304.1282,
+    "critical_temperature_margin_k": 2.0
+  },
+  "solver_profiles": [
+    {
+      "name": "baseline_solver",
+      "max_iterations": 100,
+      "tolerance": 0.01,
+      "enthalpy_tolerance": 10.0,
+      "relaxation": 0.5
+    },
+    {
+      "name": "tight_tol",
+      "max_iterations": 150,
+      "tolerance": 0.001,
+      "enthalpy_tolerance": 5.0,
+      "relaxation": 0.4
+    }
+  ]
+}
