@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import copy
 import importlib.util
+import json
 import math
 import sqlite3
 import sys
@@ -44,53 +45,22 @@ def _sweep_values(minimum: float, maximum: float, step: float) -> list[float]:
     return values
 
 
-def _ensure_input_table(conn: sqlite3.Connection, table: str) -> None:
-    conn.execute(
-        f"""
-        CREATE TABLE IF NOT EXISTS {_quote_identifier(table)} (
-            case_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            case_name TEXT UNIQUE,
-            enabled INTEGER NOT NULL DEFAULT 1,
-            fluid TEXT,
-            mass_flow_rate REAL,
-            p_low REAL,
-            p_high REAL,
-            t_source REAL,
-            t_sink REAL,
-            t0 REAL,
-            p0 REAL,
-            eta_a REAL,
-            eta_b REAL,
-            expander_mode TEXT,
-            eps_recup REAL,
-            eps_hot REAL,
-            eps_cold REAL,
-            solver_max_iterations INTEGER,
-            solver_tolerance REAL,
-            solver_enthalpy_tolerance REAL,
-            solver_relaxation REAL,
-            notes TEXT,
-            created_at TEXT NOT NULL,
-            updated_at TEXT NOT NULL
-        )
-        """
-    )
-    conn.commit()
+def _safe_load_json_object(raw: Any) -> dict[str, Any] | None:
+    if raw is None:
+        return None
 
+    if isinstance(raw, (bytes, bytearray)):
+        raw = raw.decode("utf-8", errors="ignore")
 
-def _ensure_output_table(conn: sqlite3.Connection, table: str) -> None:
-    conn.execute(
-        f"""
-        CREATE TABLE IF NOT EXISTS {_quote_identifier(table)} (
-            case_id INTEGER PRIMARY KEY,
-            case_name TEXT,
-            status TEXT,
-            error TEXT,
-            run_timestamp TEXT NOT NULL
-        )
-        """
-    )
-    conn.commit()
+    if not isinstance(raw, str) or not raw.strip():
+        return None
+
+    try:
+        value = json.loads(raw)
+    except json.JSONDecodeError:
+        return None
+
+    return value if isinstance(value, dict) else None
 
 
 def _get_table_columns(conn: sqlite3.Connection, table: str) -> set[str]:
@@ -98,14 +68,174 @@ def _get_table_columns(conn: sqlite3.Connection, table: str) -> set[str]:
     return {str(row[1]) for row in rows}
 
 
-def _infer_sqlite_type(value: Any) -> str:
-    if isinstance(value, bool):
-        return "INTEGER"
-    if isinstance(value, int):
-        return "INTEGER"
-    if isinstance(value, float):
-        return "REAL"
-    return "TEXT"
+def _ensure_table_columns(
+    conn: sqlite3.Connection,
+    table: str,
+    columns: list[tuple[str, str]],
+) -> None:
+    existing_columns = _get_table_columns(conn, table)
+    for col_name, col_type in columns:
+        if col_name in existing_columns:
+            continue
+        conn.execute(
+            f"ALTER TABLE {_quote_identifier(table)} "
+            f"ADD COLUMN {_quote_identifier(col_name)} {col_type}"
+        )
+    conn.commit()
+
+
+INPUT_TABLE_COLUMNS: list[tuple[str, str]] = [
+    ("case_id", "INTEGER PRIMARY KEY AUTOINCREMENT"),
+    ("case_name", "TEXT UNIQUE"),
+    ("enabled", "INTEGER NOT NULL DEFAULT 1"),
+    ("fluid", "TEXT"),
+    ("base_mode", "TEXT"),
+    ("mass_flow_rate", "REAL"),
+    ("p_low", "REAL"),
+    ("p_high", "REAL"),
+    ("t_source", "REAL"),
+    ("t_sink", "REAL"),
+    ("t0", "REAL"),
+    ("p0", "REAL"),
+    ("eta_a", "REAL"),
+    ("eta_b", "REAL"),
+    ("expander_mode", "TEXT"),
+    ("eps_recup", "REAL"),
+    ("eps_hot", "REAL"),
+    ("eps_cold", "REAL"),
+    ("solver_max_iterations", "INTEGER"),
+    ("solver_tolerance", "REAL"),
+    ("solver_enthalpy_tolerance", "REAL"),
+    ("solver_relaxation", "REAL"),
+    ("notes", "TEXT"),
+    ("notes_json", "TEXT"),
+    ("config_json", "TEXT"),
+    ("created_at", "TEXT NOT NULL"),
+    ("updated_at", "TEXT NOT NULL"),
+]
+
+
+def _mode_output_columns(mode_prefix: str) -> list[tuple[str, str]]:
+    return [
+        (f"{mode_prefix}_status", "TEXT"),
+        (f"{mode_prefix}_error", "TEXT"),
+        (f"{mode_prefix}_mode", "TEXT"),
+        (f"{mode_prefix}_fluid", "TEXT"),
+        (f"{mode_prefix}_converged", "INTEGER"),
+        (f"{mode_prefix}_iterations", "INTEGER"),
+        (f"{mode_prefix}_net_work_w", "REAL"),
+        (f"{mode_prefix}_q_hot_w", "REAL"),
+        (f"{mode_prefix}_q_cold_w", "REAL"),
+        (f"{mode_prefix}_cop_or_eta", "REAL"),
+        (f"{mode_prefix}_exergetic_efficiency", "REAL"),
+        (f"{mode_prefix}_cycle_isentropic_efficiency", "REAL"),
+        (f"{mode_prefix}_isentropic_reference_net_work_w", "REAL"),
+        (f"{mode_prefix}_total_exergy_destruction_w", "REAL"),
+        (f"{mode_prefix}_machine_a_mode", "TEXT"),
+        (f"{mode_prefix}_machine_a_w_dot_w", "REAL"),
+        (f"{mode_prefix}_machine_a_x_dest_w", "REAL"),
+        (f"{mode_prefix}_machine_b_mode", "TEXT"),
+        (f"{mode_prefix}_machine_b_w_dot_w", "REAL"),
+        (f"{mode_prefix}_machine_b_x_dest_w", "REAL"),
+        (f"{mode_prefix}_recuperator_q_dot_w", "REAL"),
+        (f"{mode_prefix}_recuperator_x_dest_w", "REAL"),
+        (f"{mode_prefix}_hot_hx_q_dot_w", "REAL"),
+        (f"{mode_prefix}_hot_hx_x_dest_w", "REAL"),
+        (f"{mode_prefix}_cold_hx_q_dot_w", "REAL"),
+        (f"{mode_prefix}_cold_hx_x_dest_w", "REAL"),
+    ]
+
+
+def _essential_output_columns() -> list[tuple[str, str]]:
+    columns: list[tuple[str, str]] = [
+        ("case_id", "INTEGER PRIMARY KEY"),
+        ("case_name", "TEXT"),
+        ("status", "TEXT"),
+        ("error", "TEXT"),
+        ("run_timestamp", "TEXT NOT NULL"),
+        ("input_case_name", "TEXT"),
+        ("input_fluid", "TEXT"),
+        ("input_base_mode", "TEXT"),
+        ("input_mass_flow_rate_kg_per_s", "REAL"),
+        ("input_p_low_pa", "REAL"),
+        ("input_p_high_pa", "REAL"),
+        ("input_t_source_k", "REAL"),
+        ("input_t_sink_k", "REAL"),
+        ("input_t0_k", "REAL"),
+        ("input_p0_pa", "REAL"),
+        ("input_eta_a", "REAL"),
+        ("input_eta_b", "REAL"),
+        ("input_expander_mode", "TEXT"),
+        ("input_eps_recup", "REAL"),
+        ("input_eps_hot", "REAL"),
+        ("input_eps_cold", "REAL"),
+        ("input_solver_max_iterations", "INTEGER"),
+        ("input_solver_tolerance", "REAL"),
+        ("input_solver_enthalpy_tolerance", "REAL"),
+        ("input_solver_relaxation", "REAL"),
+        ("input_notes_json", "TEXT"),
+        ("input_config_json", "TEXT"),
+    ]
+
+    columns.extend(_mode_output_columns("charge"))
+    columns.extend(_mode_output_columns("discharge"))
+    columns.extend(
+        [
+            ("objective_ex_eff_min_both", "REAL"),
+            ("objective_ex_eff_product", "REAL"),
+            ("objective_ex_eff_delta_discharge_minus_charge", "REAL"),
+            ("objective_ex_eff_harmonic_mean", "REAL"),
+            ("objective_round_trip_proxy", "REAL"),
+        ]
+    )
+    return columns
+
+
+def _ensure_input_table(conn: sqlite3.Connection, table: str) -> None:
+    column_defs = ",\n            ".join(
+        f"{_quote_identifier(name)} {sql_type}" for name, sql_type in INPUT_TABLE_COLUMNS
+    )
+    conn.execute(
+        f"""
+        CREATE TABLE IF NOT EXISTS {_quote_identifier(table)} (
+            {column_defs}
+        )
+        """
+    )
+    conn.commit()
+
+    migratable = [
+        (name, sql_type)
+        for name, sql_type in INPUT_TABLE_COLUMNS
+        if "PRIMARY KEY" not in sql_type.upper()
+    ]
+    _ensure_table_columns(conn, table, migratable)
+
+
+def _ensure_output_table(conn: sqlite3.Connection, table: str, *, reset: bool = False) -> None:
+    if reset:
+        conn.execute(f"DROP TABLE IF EXISTS {_quote_identifier(table)}")
+        conn.commit()
+
+    columns = _essential_output_columns()
+    column_defs = ",\n            ".join(
+        f"{_quote_identifier(name)} {sql_type}" for name, sql_type in columns
+    )
+    conn.execute(
+        f"""
+        CREATE TABLE IF NOT EXISTS {_quote_identifier(table)} (
+            {column_defs}
+        )
+        """
+    )
+    conn.commit()
+
+    migratable = [
+        (name, sql_type)
+        for name, sql_type in columns
+        if "PRIMARY KEY" not in sql_type.upper()
+    ]
+    _ensure_table_columns(conn, table, migratable)
 
 
 def _normalize_sql_value(value: Any) -> Any:
@@ -117,40 +247,44 @@ def _normalize_sql_value(value: Any) -> Any:
         return value
     if isinstance(value, (int, str)) or value is None:
         return value
+    if isinstance(value, (dict, list)):
+        return json.dumps(value, sort_keys=True)
     return str(value)
 
 
-def _ensure_output_columns(conn: sqlite3.Connection, table: str, row: dict[str, Any]) -> None:
-    existing_columns = _get_table_columns(conn, table)
-    for key, value in row.items():
-        if key in existing_columns:
-            continue
-        col_type = _infer_sqlite_type(value)
-        conn.execute(
-            f"ALTER TABLE {_quote_identifier(table)} ADD COLUMN {_quote_identifier(key)} {col_type}"
-        )
-    conn.commit()
-
-
 def _upsert_output_row(conn: sqlite3.Connection, table: str, row: dict[str, Any]) -> None:
-    normalized_row = {key: _normalize_sql_value(value) for key, value in row.items()}
-    _ensure_output_columns(conn, table, normalized_row)
+    existing_columns = _get_table_columns(conn, table)
+    normalized_row = {
+        key: _normalize_sql_value(value)
+        for key, value in row.items()
+        if key in existing_columns
+    }
+
+    if "case_id" not in normalized_row:
+        raise ValueError("Output row is missing required key 'case_id'")
 
     columns = sorted(normalized_row.keys())
     quoted_cols = ", ".join(_quote_identifier(col) for col in columns)
     placeholders = ", ".join("?" for _ in columns)
+    values = [normalized_row[col] for col in columns]
+
     assignments = ", ".join(
         f"{_quote_identifier(col)}=excluded.{_quote_identifier(col)}"
         for col in columns
         if col != "case_id"
     )
-    values = [normalized_row[col] for col in columns]
+
+    on_conflict = (
+        f"ON CONFLICT(case_id) DO UPDATE SET {assignments}"
+        if assignments
+        else "ON CONFLICT(case_id) DO NOTHING"
+    )
 
     conn.execute(
         f"""
         INSERT INTO {_quote_identifier(table)} ({quoted_cols})
         VALUES ({placeholders})
-        ON CONFLICT(case_id) DO UPDATE SET {assignments}
+        {on_conflict}
         """,
         values,
     )
@@ -169,10 +303,13 @@ def _config_to_input_row(config: dict[str, Any], *, case_name: str, notes: str =
     solver = config.get("solver", {})
 
     timestamp = datetime.now(timezone.utc).isoformat()
+    notes_obj = config.get("notes", {})
+
     return {
         "case_name": case_name,
         "enabled": 1,
         "fluid": config.get("fluid", "CO2"),
+        "base_mode": str(config.get("mode", "charge")),
         "mass_flow_rate": float(config.get("mass_flow_rate", 1.0)),
         "p_low": float(pressures.get("P_low", 8.0e6)),
         "p_high": float(pressures.get("P_high", 20.0e6)),
@@ -191,22 +328,25 @@ def _config_to_input_row(config: dict[str, Any], *, case_name: str, notes: str =
         "solver_enthalpy_tolerance": float(solver.get("enthalpy_tolerance", 10.0)),
         "solver_relaxation": float(solver.get("relaxation", 0.5)),
         "notes": notes,
+        "notes_json": json.dumps(notes_obj, sort_keys=True),
+        "config_json": json.dumps(config, sort_keys=True),
         "created_at": timestamp,
         "updated_at": timestamp,
     }
 
 
-def _insert_case_if_missing(conn: sqlite3.Connection, table: str, case_row: dict[str, Any]) -> None:
+def _insert_case_if_missing(conn: sqlite3.Connection, table: str, case_row: dict[str, Any]) -> bool:
     columns = sorted(case_row.keys())
     values = [case_row[col] for col in columns]
     quoted_cols = ", ".join(_quote_identifier(col) for col in columns)
     placeholders = ", ".join("?" for _ in columns)
 
-    conn.execute(
+    cursor = conn.execute(
         f"INSERT OR IGNORE INTO {_quote_identifier(table)} ({quoted_cols}) VALUES ({placeholders})",
         values,
     )
     conn.commit()
+    return int(cursor.rowcount) > 0
 
 
 def _seed_baseline_case(
@@ -217,9 +357,7 @@ def _seed_baseline_case(
     force: bool = False,
 ) -> None:
     if not force:
-        existing = conn.execute(
-            f"SELECT COUNT(*) FROM {_quote_identifier(table)}"
-        ).fetchone()
+        existing = conn.execute(f"SELECT COUNT(*) FROM {_quote_identifier(table)}").fetchone()
         if existing is not None and int(existing[0]) > 0:
             return
 
@@ -244,29 +382,19 @@ def _seed_eta_grid_cases(
             config["turbomachine_B"]["eta_isentropic"] = eta_b
 
             case_name = f"etaA_{eta_a:.3f}_etaB_{eta_b:.3f}"
-            case_row = _config_to_input_row(
-                config,
-                case_name=case_name,
-                notes="grid seed",
-            )
-
-            before = conn.execute(
-                f"SELECT COUNT(*) FROM {_quote_identifier(table)}"
-            ).fetchone()
-            count_before = int(before[0]) if before is not None else 0
-            _insert_case_if_missing(conn, table, case_row)
-            after = conn.execute(
-                f"SELECT COUNT(*) FROM {_quote_identifier(table)}"
-            ).fetchone()
-            count_after = int(after[0]) if after is not None else 0
-            if count_after > count_before:
+            case_row = _config_to_input_row(config, case_name=case_name, notes="grid seed")
+            if _insert_case_if_missing(conn, table, case_row):
                 inserted += 1
 
     return inserted
 
 
 def _resolve_case_config(base_config: dict[str, Any], case_row: dict[str, Any]) -> dict[str, Any]:
-    config = copy.deepcopy(base_config)
+    config_json_obj = _safe_load_json_object(case_row.get("config_json"))
+    if config_json_obj is not None:
+        config = config_json_obj
+    else:
+        config = copy.deepcopy(base_config)
 
     config.setdefault("pressures", {})
     config.setdefault("temperatures", {})
@@ -278,8 +406,14 @@ def _resolve_case_config(base_config: dict[str, Any], case_row: dict[str, Any]) 
     config.setdefault("turbomachine_B", {})
     config.setdefault("solver", {})
 
+    notes_obj = _safe_load_json_object(case_row.get("notes_json"))
+    if notes_obj is not None:
+        config["notes"] = notes_obj
+
     if case_row.get("fluid") is not None:
         config["fluid"] = case_row["fluid"]
+    if case_row.get("base_mode") is not None:
+        config["mode"] = str(case_row["base_mode"])
     if case_row.get("mass_flow_rate") is not None:
         config["mass_flow_rate"] = float(case_row["mass_flow_rate"])
 
@@ -334,10 +468,12 @@ def _flatten_inputs(config: dict[str, Any], case_row: dict[str, Any]) -> dict[st
     machine_a = config.get("turbomachine_A", {})
     machine_b = config.get("turbomachine_B", {})
     solver = config.get("solver", {})
+    notes_obj = config.get("notes", {})
 
     return {
         "input_case_name": case_row.get("case_name"),
         "input_fluid": config.get("fluid"),
+        "input_base_mode": config.get("mode"),
         "input_mass_flow_rate_kg_per_s": config.get("mass_flow_rate"),
         "input_p_low_pa": pressures.get("P_low"),
         "input_p_high_pa": pressures.get("P_high"),
@@ -355,37 +491,19 @@ def _flatten_inputs(config: dict[str, Any], case_row: dict[str, Any]) -> dict[st
         "input_solver_tolerance": solver.get("tolerance"),
         "input_solver_enthalpy_tolerance": solver.get("enthalpy_tolerance"),
         "input_solver_relaxation": solver.get("relaxation"),
+        "input_notes_json": json.dumps(notes_obj, sort_keys=True),
+        "input_config_json": json.dumps(config, sort_keys=True),
     }
 
 
-def _flatten_scalar_object(prefix: str, obj: object) -> dict[str, Any]:
-    values: dict[str, Any] = {}
-    for attr_name, attr_value in vars(obj).items():
-        if isinstance(attr_value, (int, float, str, bool)) or attr_value is None:
-            values[f"{prefix}_{attr_name.lower()}"] = attr_value
-    return values
-
-
-def _compute_machine_eta_isentropic(machine: object) -> float:
-    mode = getattr(machine, "mode")
-    h_in = float(getattr(machine, "h_in"))
-    h_out = float(getattr(machine, "h_out"))
-    h_out_s = float(getattr(machine, "h_out_s"))
-
-    if mode == "compressor":
-        denominator = h_out - h_in
-        numerator = h_out_s - h_in
-        return numerator / denominator if denominator > 0.0 else math.nan
-    if mode == "expander":
-        denominator = h_in - h_out_s
-        numerator = h_in - h_out
-        return numerator / denominator if denominator > 0.0 else math.nan
-    if mode == "throttle":
-        return 0.0
-    return math.nan
-
-
 def _flatten_cycle_result(mode_prefix: str, result: object, t0: float) -> dict[str, Any]:
+    components = getattr(result, "components", {})
+    machine_a = components.get("machine_A")
+    machine_b = components.get("machine_B")
+    recuperator = components.get("recuperator")
+    hot_hx = components.get("hot_hx")
+    cold_hx = components.get("cold_hx")
+
     row: dict[str, Any] = {
         f"{mode_prefix}_mode": getattr(result, "mode"),
         f"{mode_prefix}_fluid": getattr(result, "fluid"),
@@ -403,32 +521,27 @@ def _flatten_cycle_result(mode_prefix: str, result: object, t0: float) -> dict[s
         f"{mode_prefix}_total_exergy_destruction_w": getattr(
             result, "total_exergy_destruction"
         ),
+        f"{mode_prefix}_machine_a_mode": getattr(machine_a, "mode", None),
+        f"{mode_prefix}_machine_a_w_dot_w": getattr(machine_a, "W_dot", math.nan),
+        f"{mode_prefix}_machine_a_x_dest_w": (
+            machine_a.exergy_destruction(t0) if machine_a is not None else math.nan
+        ),
+        f"{mode_prefix}_machine_b_mode": getattr(machine_b, "mode", None),
+        f"{mode_prefix}_machine_b_w_dot_w": getattr(machine_b, "W_dot", math.nan),
+        f"{mode_prefix}_machine_b_x_dest_w": (
+            machine_b.exergy_destruction(t0) if machine_b is not None else math.nan
+        ),
+        f"{mode_prefix}_recuperator_q_dot_w": getattr(recuperator, "Q_dot", math.nan),
+        f"{mode_prefix}_recuperator_x_dest_w": (
+            recuperator.exergy_destruction(t0) if recuperator is not None else math.nan
+        ),
+        f"{mode_prefix}_hot_hx_q_dot_w": getattr(hot_hx, "Q_dot", math.nan),
+        f"{mode_prefix}_hot_hx_x_dest_w": hot_hx.exergy_destruction(t0) if hot_hx is not None else math.nan,
+        f"{mode_prefix}_cold_hx_q_dot_w": getattr(cold_hx, "Q_dot", math.nan),
+        f"{mode_prefix}_cold_hx_x_dest_w": (
+            cold_hx.exergy_destruction(t0) if cold_hx is not None else math.nan
+        ),
     }
-
-    states = getattr(result, "states")
-    for state_index in sorted(states.keys()):
-        state = states[state_index]
-        state_prefix = f"{mode_prefix}_state_{state_index}"
-        row[f"{state_prefix}_label"] = state.label
-        row[f"{state_prefix}_t_k"] = state.T
-        row[f"{state_prefix}_p_pa"] = state.P
-        row[f"{state_prefix}_h_j_per_kg"] = state.h
-        row[f"{state_prefix}_s_j_per_kgk"] = state.s
-        row[f"{state_prefix}_psi_j_per_kg"] = state.psi
-
-    components = getattr(result, "components")
-    for component_name, component in components.items():
-        component_prefix = f"{mode_prefix}_{component_name.lower()}"
-        row.update(_flatten_scalar_object(component_prefix, component))
-
-        if hasattr(component, "exergy_destruction"):
-            row[f"{component_prefix}_x_dest_w"] = component.exergy_destruction(t0)
-
-        if component_name in {"machine_A", "machine_B"}:
-            row[f"{component_prefix}_eta_isentropic_actual"] = _compute_machine_eta_isentropic(
-                component
-            )
-
     return row
 
 
@@ -443,9 +556,9 @@ def _add_dual_mode_objectives(row: dict[str, Any]) -> None:
             row["objective_ex_eff_min_both"] = min(charge_ex, discharge_ex)
             row["objective_ex_eff_product"] = charge_ex * discharge_ex
             row["objective_ex_eff_delta_discharge_minus_charge"] = discharge_ex - charge_ex
-            sum_ex = charge_ex + discharge_ex
-            if sum_ex > 0.0:
-                row["objective_ex_eff_harmonic_mean"] = 2.0 * charge_ex * discharge_ex / sum_ex
+            ex_sum = charge_ex + discharge_ex
+            if ex_sum > 0.0:
+                row["objective_ex_eff_harmonic_mean"] = 2.0 * charge_ex * discharge_ex / ex_sum
 
     if isinstance(charge_cop, (int, float)) and isinstance(discharge_eta, (int, float)):
         if math.isfinite(charge_cop) and math.isfinite(discharge_eta):
@@ -478,8 +591,8 @@ def _select_cases(
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
-            "Dual-mode (charge + discharge) sensitivity I/O pipeline backed by SQLite. "
-            "One input case -> one output row with full flattened outputs from both modes."
+            "Dual-mode (charge + discharge) sensitivity pipeline backed by SQLite. "
+            "One input case -> one output row with all config inputs and essential output metrics."
         )
     )
     parser.add_argument(
@@ -503,8 +616,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--output-table",
         type=str,
-        default="cycle_dual_mode_results",
+        default="cycle_dual_mode_results_essential",
         help="SQLite output table name",
+    )
+    parser.add_argument(
+        "--reset-output-table",
+        action="store_true",
+        help="Drop and recreate the output table before running",
     )
     parser.add_argument(
         "--seed-baseline",
@@ -549,86 +667,92 @@ def main() -> None:
     conn = sqlite3.connect(args.db)
     conn.row_factory = sqlite3.Row
 
-    _ensure_input_table(conn, args.input_table)
-    _ensure_output_table(conn, args.output_table)
+    try:
+        _ensure_input_table(conn, args.input_table)
+        _ensure_output_table(conn, args.output_table, reset=args.reset_output_table)
 
-    if args.seed_baseline:
-        _seed_baseline_case(conn, args.input_table, base_config)
+        if args.seed_baseline:
+            _seed_baseline_case(conn, args.input_table, base_config)
 
-    if args.seed_eta_grid:
-        eta_a_values = _sweep_values(args.eta_a_min, args.eta_a_max, args.eta_a_step)
-        eta_b_values = _sweep_values(args.eta_b_min, args.eta_b_max, args.eta_b_step)
-        inserted = _seed_eta_grid_cases(
+        if args.seed_eta_grid:
+            eta_a_values = _sweep_values(args.eta_a_min, args.eta_a_max, args.eta_a_step)
+            eta_b_values = _sweep_values(args.eta_b_min, args.eta_b_max, args.eta_b_step)
+            inserted = _seed_eta_grid_cases(
+                conn,
+                args.input_table,
+                base_config,
+                eta_a_values,
+                eta_b_values,
+            )
+            print(f"Inserted {inserted} new grid cases into {args.input_table}")
+
+        if not args.seed_baseline and not args.seed_eta_grid:
+            _seed_baseline_case(conn, args.input_table, base_config)
+
+        case_rows = _select_cases(
             conn,
             args.input_table,
-            base_config,
-            eta_a_values,
-            eta_b_values,
+            case_id=args.case_id,
+            limit=args.limit,
         )
-        print(f"Inserted {inserted} new grid cases into {args.input_table}")
 
-    if not args.seed_baseline and not args.seed_eta_grid:
-        _seed_baseline_case(conn, args.input_table, base_config)
+        if not case_rows:
+            print("No enabled input cases found to run.")
+            return
 
-    case_rows = _select_cases(
-        conn,
-        args.input_table,
-        case_id=args.case_id,
-        limit=args.limit,
-    )
+        total = len(case_rows)
+        success = 0
 
-    if not case_rows:
-        print("No enabled input cases found to run.")
-        return
+        for row_index, case_row in enumerate(case_rows, start=1):
+            case_id = int(case_row["case_id"])
+            case_name = str(case_row.get("case_name") or f"case_{case_id}")
 
-    total = len(case_rows)
-    success = 0
+            resolved_config = _resolve_case_config(base_config, case_row)
+            t0 = float(resolved_config.get("dead_state", {}).get("T0", 300.0))
 
-    for row_index, case_row in enumerate(case_rows, start=1):
-        case_id = int(case_row["case_id"])
-        case_name = str(case_row.get("case_name") or f"case_{case_id}")
+            output_row: dict[str, Any] = {
+                "case_id": case_id,
+                "case_name": case_name,
+                "run_timestamp": datetime.now(timezone.utc).isoformat(),
+                "status": "ok",
+                "error": "",
+            }
+            output_row.update(_flatten_inputs(resolved_config, case_row))
 
-        resolved_config = _resolve_case_config(base_config, case_row)
-        t0 = float(resolved_config.get("dead_state", {}).get("T0", 300.0))
+            mode_errors: list[str] = []
+            for mode_name in ["charge", "discharge"]:
+                mode_config = copy.deepcopy(resolved_config)
+                mode_config["mode"] = mode_name
 
-        output_row: dict[str, Any] = {
-            "case_id": case_id,
-            "case_name": case_name,
-            "run_timestamp": datetime.now(timezone.utc).isoformat(),
-            "status": "ok",
-            "error": "",
-        }
-        output_row.update(_flatten_inputs(resolved_config, case_row))
+                try:
+                    mode_result = build_cycle(mode_config)
+                    output_row[f"{mode_name}_status"] = "ok"
+                    output_row[f"{mode_name}_error"] = ""
+                    output_row.update(_flatten_cycle_result(mode_name, mode_result, t0))
+                except (RuntimeError, ValueError) as exc:
+                    mode_errors.append(f"{mode_name}: {exc}")
+                    output_row[f"{mode_name}_status"] = "error"
+                    output_row[f"{mode_name}_error"] = str(exc)
 
-        mode_errors: list[str] = []
-        for mode_name in ["charge", "discharge"]:
-            mode_config = copy.deepcopy(resolved_config)
-            mode_config["mode"] = mode_name
+            if mode_errors:
+                output_row["status"] = "error"
+                output_row["error"] = " | ".join(mode_errors)
+            else:
+                _add_dual_mode_objectives(output_row)
+                success += 1
 
-            try:
-                mode_result = build_cycle(mode_config)
-                output_row[f"{mode_name}_status"] = "ok"
-                output_row[f"{mode_name}_error"] = ""
-                output_row.update(_flatten_cycle_result(mode_name, mode_result, t0))
-            except (RuntimeError, ValueError) as exc:
-                mode_errors.append(f"{mode_name}: {exc}")
-                output_row[f"{mode_name}_status"] = "error"
-                output_row[f"{mode_name}_error"] = str(exc)
+            _upsert_output_row(conn, args.output_table, output_row)
+            print(
+                f"[{row_index}/{total}] processed case_id={case_id} "
+                f"({case_name}) -> {output_row['status']}"
+            )
 
-        if mode_errors:
-            output_row["status"] = "error"
-            output_row["error"] = " | ".join(mode_errors)
-        else:
-            _add_dual_mode_objectives(output_row)
-            success += 1
-
-        _upsert_output_row(conn, args.output_table, output_row)
-        print(f"[{row_index}/{total}] processed case_id={case_id} ({case_name}) -> {output_row['status']}")
-
-    print(
-        f"Completed dual-mode run for {total} cases. "
-        f"Successful dual-mode rows: {success}. Output table: {args.output_table}"
-    )
+        print(
+            f"Completed dual-mode run for {total} cases. "
+            f"Successful dual-mode rows: {success}. Output table: {args.output_table}"
+        )
+    finally:
+        conn.close()
 
 
 if __name__ == "__main__":
