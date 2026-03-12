@@ -1,0 +1,43 @@
+{
+  "fluid": "CO2",
+  "mode": "discharge",
+  "mass_flow_rate": 1.0,
+  "pressures": {
+    "P_low": 8000000.0,
+    "P_high": 20000000.0
+  },
+  "temperatures": {
+    "T_source": 700.0,
+    "T_sink": 300.0
+  },
+  "dead_state": {
+    "T0": 300.0,
+    "P0": 101325.0
+  },
+  "recuperator": {
+    "effectiveness": 1.0
+  },
+  "heat_exchanger_hot": {
+    "effectiveness": 1.0
+  },
+  "heat_exchanger_cold": {
+    "effectiveness": 1.0
+  },
+  "turbomachine_A": {
+    "eta_isentropic": 1.0,
+    "expander_mode": "throttle"
+  },
+  "turbomachine_B": {
+    "eta_isentropic": 1.0
+  },
+  "solver": {
+    "max_iterations": 100,
+    "tolerance": 0.01,
+    "enthalpy_tolerance": 10.0,
+    "relaxation": 0.5
+  },
+  "notes": {
+    "P_critical_CO2_MPa": 7.377,
+    "low_pressure_choice": "P_low is set above the critical pressure to avoid default near-critical numerical instability."
+  }
+}
