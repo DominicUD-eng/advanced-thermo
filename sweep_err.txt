@@ -1,0 +1,31 @@
+Traceback (most recent call last):
+  File "C:\Users\Dominic\Documents\advanced-thermo\reversible-recup-br\analysis\dual_mode_sqlite_io.py", line 1614, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\Dominic\Documents\advanced-thermo\reversible-recup-br\analysis\dual_mode_sqlite_io.py", line 1548, in main
+    total, success = _run_case_configs_to_table(
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        conn,
+        ^^^^^
+    ...<3 lines>...
+        reset_output_table=args.reset_output_table,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Dominic\Documents\advanced-thermo\reversible-recup-br\analysis\dual_mode_sqlite_io.py", line 1164, in _run_case_configs_to_table
+    mode_result = build_cycle(mode_config)
+  File "C:\Users\Dominic\Documents\advanced-thermo\reversible-recup-br\reversible-recup-brayton.py", line 486, in build_cycle
+    reference_result = build_cycle(
+        reference_config,
+        compute_isentropic_reference=False,
+    )
+  File "C:\Users\Dominic\Documents\advanced-thermo\reversible-recup-br\reversible-recup-brayton.py", line 284, in build_cycle
+    recuperator = Recuperator(
+        fluid=fluid,
+    ...<7 lines>...
+        P0=P0,
+    )
+  File "C:\Users\Dominic\Documents\advanced-thermo\components\recuperator.py", line 58, in __init__
+    self.T_cold_out = PropsSI("T", "H", self.h_cold_out, "P", self.P_cold, self.fluid)
+                      ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt

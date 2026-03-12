@@ -57,6 +57,10 @@ class CycleResult:
     total_exergy_destruction: float
     iterations: int
     converged: bool
+    # Temperature diagnostics computed from state points
+    min_state_temp_k: float = math.nan
+    max_state_temp_k: float = math.nan
+    is_cold_side_subcritical: bool = False
 
 
 def load_config(config_path: Path, mode_override: str | None = None) -> dict[str, Any]:
@@ -429,6 +433,33 @@ def build_cycle(
         "cold_hx": cold_hx,
     }
 
+    # --- Temperature diagnostics ------------------------------------------------
+    _state_temps = [states[i].T for i in range(1, 7)]
+    _min_state_temp_k = min(_state_temps)
+    _max_state_temp_k = max(_state_temps)
+
+    # CO2 critical temperature is 304.1282 K; flag cold-side points below it
+    _co2_t_crit = 304.1282
+    _is_cold_side_subcritical = _min_state_temp_k < _co2_t_crit
+
+    # Enforce per-mode maximum operating temperature (user-configured, Celsius)
+    _constraints_cfg = config.get("constraints", {})
+    if mode == "charge":
+        _max_op_temp_c = float(_constraints_cfg.get("charge_max_temp_c", 1200.0))
+        _max_op_temp_k = _max_op_temp_c + 273.15
+        if _max_state_temp_k > _max_op_temp_k:
+            raise ValueError(
+                f"Charge cycle max state temperature {_max_state_temp_k:.2f} K "
+                f"({_max_state_temp_k - 273.15:.1f} \u00b0C) exceeds limit "
+                f"{_max_op_temp_k:.2f} K ({_max_op_temp_c:.1f} \u00b0C)."
+            )
+    elif mode == "discharge":
+        # Discharge max is controlled as an upstream sweep bound (discharge_max_temp_c);
+        # we still record max_state_temp for diagnostics but do NOT raise here so
+        # single baseline runs that exceed the sweep bound are still reportable.
+        pass
+    # ---------------------------------------------------------------------------
+
     work_into_system = machine_a.W_dot + machine_b.W_dot
     net_work_out = -work_into_system
 
@@ -489,6 +520,9 @@ def build_cycle(
         total_exergy_destruction=total_exergy_destruction,
         iterations=iteration,
         converged=converged,
+        min_state_temp_k=_min_state_temp_k,
+        max_state_temp_k=_max_state_temp_k,
+        is_cold_side_subcritical=_is_cold_side_subcritical,
     )
 
 

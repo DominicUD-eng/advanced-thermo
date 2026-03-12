@@ -216,6 +216,11 @@ def _mode_output_columns(mode_prefix: str) -> list[tuple[str, str]]:
         (f"{mode_prefix}_hot_hx_x_dest_w", "REAL"),
         (f"{mode_prefix}_cold_hx_q_dot_w", "REAL"),
         (f"{mode_prefix}_cold_hx_x_dest_w", "REAL"),
+        # Temperature diagnostics
+        (f"{mode_prefix}_min_state_temp_k", "REAL"),
+        (f"{mode_prefix}_max_state_temp_k", "REAL"),
+        (f"{mode_prefix}_is_cold_side_subcritical", "INTEGER"),
+        (f"{mode_prefix}_configured_max_temp_c", "REAL"),
     ]
 
 
@@ -538,7 +543,7 @@ def _default_numeric_bounds(_base_config: dict[str, Any]) -> dict[str, tuple[flo
         "mass_flow_rate": (0.1, 200.0),
         "p_low": (8.0e6, 3.5e7),
         "p_high": (9.0e6, 5.5e7),
-        "t_source": (450.0, 1400.0),
+        "t_source": (450.0, 1273.15),   # capped at discharge_max_temp_c = 1000 °C
         "t_sink": (250.0, 750.0),
         "t0": (250.0, 350.0),
         "p0": (8.0e4, 2.5e5),
@@ -611,6 +616,11 @@ def _load_lhsmdu_config(path: Path, base_config: dict[str, Any]) -> dict[str, An
         "enforce_temperature_above_critical": False,
         "critical_temperature_k": 304.1282,
         "critical_temperature_margin_k": 2.0,
+        # Per-mode max operating temperatures (Celsius) used as design limits.
+        # discharge_max_temp_c is applied as a pre-solve T_source bound in the sweep.
+        # charge_max_temp_c is enforced post-solve inside build_cycle.
+        "discharge_max_temp_c": 1000.0,
+        "charge_max_temp_c": 1200.0,
     }
     constraints_raw = raw_cfg.get("constraints", {})
     if not isinstance(constraints_raw, dict):
@@ -649,6 +659,12 @@ def _load_lhsmdu_config(path: Path, base_config: dict[str, Any]) -> dict[str, An
             constraints_raw.get(
                 "critical_temperature_margin_k", constraints_defaults["critical_temperature_margin_k"]
             )
+        ),
+        "discharge_max_temp_c": float(
+            constraints_raw.get("discharge_max_temp_c", constraints_defaults["discharge_max_temp_c"])
+        ),
+        "charge_max_temp_c": float(
+            constraints_raw.get("charge_max_temp_c", constraints_defaults["charge_max_temp_c"])
         ),
     }
 
@@ -871,6 +887,14 @@ def _apply_constraints(
     config["temperatures"]["T_sink"] = float(t_sink)
     config["temperatures"]["T_source"] = float(t_source)
 
+    # Apply discharge maximum operating temperature as a T_source upper bound.
+    # This keeps the sampled design space inside the real equipment limit.
+    # (charge max is enforced post-solve inside build_cycle)
+    discharge_max_temp_c = float(constraints.get("discharge_max_temp_c", 1000.0))
+    discharge_max_temp_k = discharge_max_temp_c + 273.15
+    if config["temperatures"]["T_source"] > discharge_max_temp_k:
+        config["temperatures"]["T_source"] = discharge_max_temp_k
+
     for key in ["eta_a", "eta_b", "eps_recup", "eps_hot", "eps_cold"]:
         low, high = bounds[key]
         if key == "eta_a":
@@ -925,6 +949,12 @@ def _prepare_lhsmdu_case_configs(
             notes["sweep_seed"] = seed
             notes["sweep_sample_index"] = sample_index
             notes["sweep_bounds_configured"] = True
+
+        # Store sweep constraints into case config for retrieval during dual-mode execution
+        config["_sweep_constraints"] = {
+            "charge_max_temp_c": float(constraints.get("charge_max_temp_c", 1200.0)),
+            "discharge_max_temp_c": float(constraints.get("discharge_max_temp_c", 1000.0)),
+        }
 
         case_name = f"lhs_{sample_index:05d}"
         case_configs.append((sample_index, case_name, config))
@@ -1005,7 +1035,12 @@ def _flatten_inputs(config: dict[str, Any], case_name: str) -> dict[str, Any]:
     }
 
 
-def _flatten_cycle_result(mode_prefix: str, result: object, t0: float) -> dict[str, Any]:
+def _flatten_cycle_result(
+    mode_prefix: str,
+    result: object,
+    t0: float,
+    configured_max_temp_c: float | None = None,
+) -> dict[str, Any]:
     components = getattr(result, "components", {})
     machine_a = components.get("machine_A")
     machine_b = components.get("machine_B")
@@ -1049,6 +1084,15 @@ def _flatten_cycle_result(mode_prefix: str, result: object, t0: float) -> dict[s
         f"{mode_prefix}_cold_hx_q_dot_w": getattr(cold_hx, "Q_dot", math.nan),
         f"{mode_prefix}_cold_hx_x_dest_w": (
             cold_hx.exergy_destruction(t0) if cold_hx is not None else math.nan
+        ),
+        # Temperature diagnostics
+        f"{mode_prefix}_min_state_temp_k": getattr(result, "min_state_temp_k", math.nan),
+        f"{mode_prefix}_max_state_temp_k": getattr(result, "max_state_temp_k", math.nan),
+        f"{mode_prefix}_is_cold_side_subcritical": int(
+            bool(getattr(result, "is_cold_side_subcritical", False))
+        ),
+        f"{mode_prefix}_configured_max_temp_c": (
+            configured_max_temp_c if configured_max_temp_c is not None else math.nan
         ),
     }
     return row
@@ -1100,15 +1144,29 @@ def _run_case_configs_to_table(
         output_row.update(_flatten_inputs(resolved_config, case_name))
 
         mode_errors: list[str] = []
+        # Carry configured temperature limits into each mode's config and flatten row
+        _sweep_constraints: dict[str, Any] = resolved_config.get("_sweep_constraints", {})
+        _charge_max_c = float(_sweep_constraints.get("charge_max_temp_c", 1200.0))
+        _discharge_max_c = float(_sweep_constraints.get("discharge_max_temp_c", 1000.0))
+
+        # Propagate charge limit into config so build_cycle can enforce it
         for mode_name in ["charge", "discharge"]:
             mode_config = copy.deepcopy(resolved_config)
             mode_config["mode"] = mode_name
+            mode_config.setdefault("constraints", {})
+            if mode_name == "charge":
+                mode_config["constraints"]["charge_max_temp_c"] = _charge_max_c
+                _mode_limit_c: float = _charge_max_c
+            else:
+                _mode_limit_c = _discharge_max_c
 
             try:
                 mode_result = build_cycle(mode_config)
                 output_row[f"{mode_name}_status"] = "ok"
                 output_row[f"{mode_name}_error"] = ""
-                output_row.update(_flatten_cycle_result(mode_name, mode_result, t0))
+                output_row.update(
+                    _flatten_cycle_result(mode_name, mode_result, t0, configured_max_temp_c=_mode_limit_c)
+                )
             except (RuntimeError, ValueError) as exc:
                 mode_errors.append(f"{mode_name}: {exc}")
                 output_row[f"{mode_name}_status"] = "error"
@@ -1118,8 +1176,27 @@ def _run_case_configs_to_table(
             output_row["status"] = "error"
             output_row["error"] = " | ".join(mode_errors)
         else:
-            _add_dual_mode_objectives(output_row)
-            success += 1
+            # Cross-mode thermal-lift feasibility: charge must reach a lower minimum
+            # state temperature than discharge to effectively pump heat across modes.
+            charge_min = output_row.get("charge_min_state_temp_k")
+            discharge_min = output_row.get("discharge_min_state_temp_k")
+            if (
+                isinstance(charge_min, (int, float))
+                and isinstance(discharge_min, (int, float))
+                and math.isfinite(float(charge_min))
+                and math.isfinite(float(discharge_min))
+                and float(charge_min) >= float(discharge_min)
+            ):
+                output_row["status"] = "error"
+                output_row["error"] = (
+                    f"Thermal-lift infeasible: charge min state temp "
+                    f"{float(charge_min):.2f} K >= discharge min state temp "
+                    f"{float(discharge_min):.2f} K. "
+                    "Charge must reach a colder state than discharge."
+                )
+            else:
+                _add_dual_mode_objectives(output_row)
+                success += 1
 
         _upsert_output_row(conn, table, output_row)
         print(f"[{row_index}/{total}] processed case_id={case_id} ({case_name}) -> {output_row['status']}")
